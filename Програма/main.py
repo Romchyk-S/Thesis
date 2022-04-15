@@ -28,7 +28,7 @@ R = [12]
 
 layer_number, neuron_layer_quantity = cn.get_layer_num(entered_parms, out_parms)
 
-neurons = cn.create_neurons(entered_parms, out_parms, layer_number,  neuron_layer_quantity)
+neurons = cn.create_neurons(entered_parms, out_parms, layer_number, neuron_layer_quantity)
 
 print(neurons)
 
