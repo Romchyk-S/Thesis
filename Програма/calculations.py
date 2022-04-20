@@ -7,7 +7,15 @@ Created on Fri Apr 15 16:14:05 2022
 
 def activation_func(x):
     
-    return x
+    #Leaky ReLU
+    
+    if x < 0:
+    
+        return 0.01*x
+    
+    else:
+        
+        return x
 
 def calculate_result(neur_arr, in_arr):
 
@@ -39,7 +47,7 @@ def calculate_layer(neur_arr, in_arr, layer):
                 
                 if k == 0:
                 
-                    res.append(weight_arr[k] * in_arr[j] + neur_arr[layer][j].get_bias())
+                    res.append(activation_func(weight_arr[k] * in_arr[j] + neur_arr[layer][j].get_bias()))
                     
                 else:
                     
