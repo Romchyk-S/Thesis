@@ -7,6 +7,7 @@ Created on Fri Apr 15 15:12:43 2022
 
 import neuron_class as nc
 
+
 def get_layer_num(parms_in, parms_out):
     
     neur_layer_arr = []

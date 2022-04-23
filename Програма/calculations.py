@@ -50,21 +50,35 @@ def calculate_layer(neur_arr, in_arr, layer):
                     res.append(activation_func(weight_arr[k] * in_arr[j] + neur_arr[layer][j].get_bias()))
                     
                 else:
-                    
-                    # print(res)
-                    
-                    # print(j)
-                    
-                    # print(res[j])
-                    
+ 
                     res[j] += weight_arr[k] * in_arr[j] + neur_arr[layer][j].get_bias()
-                    
-                    # print(res[j])
-                    
-                    # print()
                 
                 k += 1
                 
             j += 1
             
         return res
+    
+def calculate_error(neur, length, data, exp_res):
+    
+    i = 0
+
+    err = 0
+
+    while i < length:
+
+        res = calculate_result(neur, data[i])
+        
+        j = 0
+        
+        while j < len(res):
+            
+            err += (exp_res[i][j]-res[j])**2
+            
+            j += 1
+        
+        i += 1
+
+    err *= 1/2
+    
+    return err
