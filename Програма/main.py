@@ -12,8 +12,6 @@ import calculations as c
 import get_data as gd
 
 
-
-
 learning_algorithm = 0
 
 neurons = []
