@@ -14,6 +14,8 @@ import get_data as gd
 
 learning_algorithm = 0
 
+eta = 0.005
+
 neurons = []
 
 entered_parms = 5
@@ -40,10 +42,6 @@ print()
 
 layer_number, neuron_layer_quantity = cn.get_layer_num(entered_parms, out_parms)
 
-# якщо на рівні n+1 нейронів більше за рівень n, виникає помилка у calculations.py, line 43
-# weight_arr = neur_arr[layer][j].get_weights()
-# IndexError: list index out of range
-
 neurons = cn.create_neurons(entered_parms, out_parms, layer_number, neuron_layer_quantity)
 
 print(neurons)
@@ -57,7 +55,17 @@ tr_set_data = set_data.copy()
 
 tr_set_res = set_res.copy()
 
-error = c.calculate_error(neurons, tr_length, tr_set_data, tr_set_res)
+result = []
+
+i = 0
+
+while i < tr_length:
+
+    result.append(c.calculate_result(neurons, tr_set_data[i]))
+
+    i += 1
+
+error = c.calculate_error(neurons, tr_length, tr_set_data, tr_set_res, result)
 
 print(f"Загальна похибка мережі: {error}")
 
@@ -70,3 +78,7 @@ test_length = set_length
 test_set_data = set_data.copy()
 
 test_set_res = set_res.copy()
+
+
+
+
