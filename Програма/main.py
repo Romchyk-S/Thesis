@@ -11,23 +11,32 @@ import calculations as c
 
 import get_data as gd
 
+import learning_algorithms as la
 
-learning_algorithm = 0
+
+# неоновлювані протягом роботи параметри
+
+set_length = 1 # неправильно обчислює, якщо більше за 1, ваги нейронів стають більші за 1. Може, шукати через загальну похибку мережі?
 
 eta = 0.005
-
-neurons = []
 
 entered_parms = 5
 
 out_parms = 1
 
+error = 10
+
+error_threshold = 0.1
+
+
+# оновлюються протягом роботи
+
+learning_algorithm = 0
+
 neurons_created = 0
 
+neurons = []
 
-
-
-set_length = 10
 
 set_data, set_res = gd.get_dataset(set_length, entered_parms)
 
@@ -55,22 +64,37 @@ tr_set_data = set_data.copy()
 
 tr_set_res = set_res.copy()
 
-result = []
+while error > error_threshold:
 
-i = 0
+    result = []
 
-while i < tr_length:
+    i = 0
 
-    result.append(c.calculate_result(neurons, tr_set_data[i]))
+    while i < tr_length:
 
-    i += 1
+        result.append(c.calculate_result(neurons, tr_set_data[i]))
 
-error = c.calculate_error(neurons, tr_length, tr_set_data, tr_set_res, result)
+        i += 1
 
-print(f"Загальна похибка мережі: {error}")
+    error = c.calculate_error(neurons, tr_length, tr_set_data, tr_set_res, result)
 
+    print(f"Загальна похибка мережі: {error}")
 
-# тут запускати алгоритми навчання
+    # подумати про збереження вихідних ваг для порівняння
+
+    print(neurons[0][0].get_weights())
+
+    if learning_algorithm == 0:
+
+        la.backpropagation(neurons, set_res, result, eta)
+
+    elif learning_algorithm == 1:
+
+        la.genetic(neurons, set_res, result)
+
+    print(neurons[0][0].get_weights())
+
+    print()
 
 
 test_length = set_length

@@ -5,36 +5,78 @@ Created on Wed Feb 23 09:54:48 2022
 @author: romas
 """
 
-def backpropagation(neur_arr, exp_res, res, eta, activation_func):
+# import genetic_algorithm_functions as ga
 
 
-    # фіксуємо останній рівень. Цикл 1. i = len(neur_arr)-1, i > 0
-    # Записуємо вихід першого нейрона (n) на ньому, порівнюємо з очікуваним. set_error(self, num) Беремо похідну функції активації в точці індукованого локального поля (activ_func_der). Для збереження індукованого локального поля нові функції класу set_S, get_S. Цикл 2. j = 0, j < len(neur_arr[i])
-    # Фіксуємо всі нейрони, що входять у нейрон вихідного рівня.  Цикл 3. k = 0. k < len(neur_arr[i-1]). Тому не треба, аби нейрон вихідного рівня щось бачив
-    # Множимо похибку n на вхід, наданий кожним розглянутим нейроном, оновлюємо вагу. neur_arr[i-1][k].update_weight(j, (neur_arr[i][j].get_error())*neur_arr[i-1][k].get_exit_value(self, j)*activ_func_der(S)). Для цього треба зберігати виходи в циклі обчислення, нові функції класу set_exit_value та get_exit_value, а також update_weight
-    # Коли той цикл за k завершено, нейрон ij надсилає кожному нейрону попереднього рівня сигнал.  Цикл 4. k = 0. k < len(neur_arr[i-1]). Надіслати кожному з них (d-y)*neur_arr[i-1][k].get_weight(j), вага оновлена внаслідок навчання. neur_arr[i-1][k].set_error(надісланий результат). set_error(self, num): self.error + num, нові функції класу set_error та get_error
-    # Перейти на i -= 1
-    # Необхідні функції класу: set_S, get_S, get_error, set_error, set_exit_value, get_exit_value, update_weight(j)
-    # Результат: 4 цикли, 7 нових функцій класу, відповідні їм 3 параметри, обчислення похідної активаційної функції. Можливо, ще один параметр класу та відповідні функції до нього
+def backpropagation(neur_arr, exp_res, res, eta):
 
-    # i = 0
+    # як оновлювати bias?
 
-    # while i < len(exp_res): # по всій вибірці
+    i = 0
 
-    #     j = 0
+    # i->j, j->k, k->l
 
-    #     while j < len(res): # по локальному полю / вектору різниць
+    while i < len(res):
 
-    #         k = 0
+        j = len(neur_arr)-1
 
-    #         while k < len()
+        while j > 0:
 
-    #         j += 1
+            k = 0
 
-    #     i += 1
+            while k < len(neur_arr[j]):
+
+                if j == len(neur_arr)-1:
+
+                    neur_arr[j][k].set_error(exp_res[i][k]-res[i][k])
+
+                else:
+
+                    l = 0
+
+                    while l < len(neur_arr[j+1]):
+
+                        neur_arr[j][k].set_error(neur_arr[j][k].get_weight(l)*neur_arr[j+1][l].get_error())
+
+                        l += 1
+
+                # зберегли помилку
+                # похідна функції активації в точці
+
+                f_der = neur_arr[j][k].get_activation_function_der_value(neur_arr[j][k].get_S())
+
+                delta_w_temp = eta*neur_arr[j][k].get_error()*f_der
+
+
+                # знайти значення, яке нейрон передав на наступний рівень, оновити вагу
+
+                l = 0
+
+                while l < len(neur_arr[j-1]):
+
+                    delta_w = delta_w_temp*neur_arr[j-1][l].get_exit_value(k)
+
+                    # print(j-1)
+
+                    # print(l)
+
+                    # print(delta_w)
+
+                    # print()
+
+                    neur_arr[j-1][l].update_weight(k, delta_w)
+
+                    l += 1
+
+
+                k += 1
+
+            j -= 1
+
+        i += 1
 
     return 0
 
-def genetic(neur_arr, desired_result, current_result):
+def genetic(neur_arr, exp_res, res):
 
     return 0
