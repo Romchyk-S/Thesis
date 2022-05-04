@@ -16,13 +16,17 @@ def backpropagation_calculation(error_threshold, set_length, set_data, set_res, 
 
     error = 1
 
+    count = 0
+
     while error > error_threshold:
 
         result, error = c.calculating_cycle(set_length, set_data, set_res, neur_arr)
 
         backpropagation_learning(neur_arr, set_res, result, eta)
 
-    return result, error
+        count += 1
+
+    return result, error, count
 
 def backpropagation_learning(neur_arr, exp_res, res, eta):
 
@@ -95,6 +99,8 @@ def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, err_thresho
 
     error = 1
 
+    count = 0
+
     while error > err_threshold:
 
         initial_population_length = 10
@@ -136,6 +142,8 @@ def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, err_thresho
         err = min(list(population_with_err.values()))
 
         print(err)
+
+        count += 1
 
         break
 

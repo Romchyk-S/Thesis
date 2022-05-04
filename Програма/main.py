@@ -14,6 +14,7 @@ import learning_algorithms as la
 
 print()
 
+
 # неоновлювані протягом роботи параметри
 
 set_length = 1 # неправильно обчислює, якщо більше за 1, ваги нейронів стають більші за 1. Може, шукати через загальну похибку мережі?
@@ -31,7 +32,7 @@ error_threshold = 0.001
 
 # оновлюються протягом роботи
 
-learning_algorithm = 1
+learning_algorithm = 0
 
 neurons_created = 0
 
@@ -73,12 +74,14 @@ tr_set_res = set_res.copy()
 
 if learning_algorithm == 0:
 
-    res, err = la.backpropagation_calculation(error_threshold, tr_length, tr_set_data, tr_set_res, neurons, eta)
+    res, err, count = la.backpropagation_calculation(error_threshold, tr_length, tr_set_data, tr_set_res, neurons, eta)
 
 
     print(res)
 
     print(err)
+
+    print(count)
 
     print()
 
