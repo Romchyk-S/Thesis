@@ -5,10 +5,26 @@ Created on Wed Feb 23 09:54:48 2022
 @author: romas
 """
 
-# import genetic_algorithm_functions as ga
+import genetic_algorithm_functions as ga
+
+import calculations as c
+
+# import random as r
 
 
-def backpropagation(neur_arr, exp_res, res, eta):
+def backpropagation_calculation(error_threshold, set_length, set_data, set_res, neur_arr, eta):
+
+    error = 1
+
+    while error > error_threshold:
+
+        result, error = c.calculating_cycle(set_length, set_data, set_res, neur_arr)
+
+        backpropagation_learning(neur_arr, set_res, result, eta)
+
+    return result, error
+
+def backpropagation_learning(neur_arr, exp_res, res, eta):
 
     # як оновлювати bias?
 
@@ -75,8 +91,52 @@ def backpropagation(neur_arr, exp_res, res, eta):
 
         i += 1
 
-    return 0
+def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, err_threshold):
 
-def genetic(neur_arr, exp_res, res):
+    error = 1
+
+    while error > err_threshold:
+
+        initial_population_length = 10
+
+        initial_population = ga.create_initial_population(initial_population_length, neur_arr, neur_layer_arr)
+
+        # print(initial_population)
+
+
+        population_with_err = ga.create_chromosome_error_dict(initial_population, set_length, set_data, set_res)
+
+        print(population_with_err)
+
+
+        # ці ще не працюють
+
+
+        # ga.parent_selection(population_with_err)
+
+
+        # crossover_prob = 0 + r.random() * (1-0)
+
+        # if crossover_prob > 0.1:
+
+        #     ga.crossover()
+
+        # mutation_prob = 0 + r.random() * (1-0)
+
+        # if mutation_prob > 0.1:
+
+        #     ga.mutation()
+
+        # чи зберігати батьків?
+
+        # оновити population_with_err, утворити нове покоління
+
+        print()
+
+        err = min(list(population_with_err.values()))
+
+        print(err)
+
+        break
 
     return 0

@@ -50,13 +50,23 @@ class Neuron:
 
         return self.weights
 
-    def add_weights(self, num_next_layer_quant):
+    def add_random_weights(self, num_next_layer_quant):
 
         i = 0
 
         while i < num_next_layer_quant:
 
             self.weights.append(round(0 + (r.random() * (1 - 0)), 2))
+
+            i += 1
+
+    def add_weights_from_arr(self, weight_arr):
+
+        i = 0
+
+        while i < len(weight_arr):
+
+            self.weights.append(weight_arr[i])
 
             i += 1
 

@@ -7,12 +7,12 @@ Created on Wed Feb 23 09:54:02 2022
 
 import create_network as cn
 
-import calculations as c
-
 import get_data as gd
 
 import learning_algorithms as la
 
+
+print()
 
 # неоновлювані протягом роботи параметри
 
@@ -26,12 +26,12 @@ out_parms = 1
 
 error = 10
 
-error_threshold = 0.1
+error_threshold = 0.001
 
 
 # оновлюються протягом роботи
 
-learning_algorithm = 0
+learning_algorithm = 1
 
 neurons_created = 0
 
@@ -40,9 +40,12 @@ neurons = []
 
 set_data, set_res = gd.get_dataset(set_length, entered_parms)
 
-# розділяти на tr_set і test_set
+
+print("Вхід:")
 
 print(set_data)
+
+print("Вихід:")
 
 print(set_res)
 
@@ -58,43 +61,31 @@ print(neurons)
 print()
 
 
+# розділяти на tr_set і test_set
+
 tr_length = set_length
 
 tr_set_data = set_data.copy()
 
 tr_set_res = set_res.copy()
 
-while error > error_threshold:
 
-    result = []
 
-    i = 0
+if learning_algorithm == 0:
 
-    while i < tr_length:
+    res, err = la.backpropagation_calculation(error_threshold, tr_length, tr_set_data, tr_set_res, neurons, eta)
 
-        result.append(c.calculate_result(neurons, tr_set_data[i]))
 
-        i += 1
+    print(res)
 
-    error = c.calculate_error(neurons, tr_length, tr_set_data, tr_set_res, result)
-
-    print(f"Загальна похибка мережі: {error}")
-
-    # подумати про збереження вихідних ваг для порівняння
-
-    print(neurons[0][0].get_weights())
-
-    if learning_algorithm == 0:
-
-        la.backpropagation(neurons, set_res, result, eta)
-
-    elif learning_algorithm == 1:
-
-        la.genetic(neurons, set_res, result)
-
-    print(neurons[0][0].get_weights())
+    print(err)
 
     print()
+
+elif learning_algorithm == 1:
+
+    la.genetic(neurons,  neuron_layer_quantity, tr_length, tr_set_data, tr_set_res, error_threshold)
+
 
 
 test_length = set_length

@@ -6,7 +6,21 @@ Created on Fri Apr 15 16:14:05 2022
 """
 
 
+def calculating_cycle(set_length, set_data, set_res, neur_arr):
 
+    result = []
+
+    i = 0
+
+    while i < set_length:
+
+        result.append(calculate_result(neur_arr, set_data[i]))
+
+        i += 1
+
+    error = calculate_error(neur_arr, set_length, set_data, set_res, result)
+
+    return result, error
 
 def calculate_result(neur_arr, in_arr):
 
