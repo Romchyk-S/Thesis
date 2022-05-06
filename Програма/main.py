@@ -32,7 +32,7 @@ error_threshold = 0.001
 
 # оновлюються протягом роботи
 
-learning_algorithm = 0
+learning_algorithm = 1
 
 neurons_created = 0
 

@@ -112,13 +112,14 @@ def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, err_thresho
 
         population_with_err = ga.create_chromosome_error_dict(initial_population, set_length, set_data, set_res)
 
-        print(population_with_err)
+        # print(population_with_err)
 
+        # print()
 
         # ці ще не працюють
 
 
-        # ga.parent_selection(population_with_err)
+        ga.parent_selection(population_with_err)
 
 
         # crossover_prob = 0 + r.random() * (1-0)

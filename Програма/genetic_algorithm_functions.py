@@ -9,6 +9,8 @@ import create_network as cn
 
 import calculations as c
 
+import random as r
+
 
 
 def create_initial_population(initial_population_length, neur_arr, neur_layer_arr):
@@ -31,6 +33,22 @@ def create_initial_population(initial_population_length, neur_arr, neur_layer_ar
 
     return initial_population
 
+def make_chromosome(neur_arr):
+
+    chromosome = []
+
+    for i in neur_arr:
+
+        for j in i:
+
+            k = j.get_weights()
+
+            for m in k:
+
+                chromosome.append(m)
+
+    return chromosome
+
 def create_chromosome_error_dict(initial_population, set_length, set_data, set_res):
 
     # err_arr = []
@@ -41,27 +59,56 @@ def create_chromosome_error_dict(initial_population, set_length, set_data, set_r
 
     chromosomes = []
 
+
     for i in initial_population:
 
-        chromosomes.append(make_chromosome(i))
+        new_chromosome = make_chromosome(i)
+
+        chromosomes.append(new_chromosome)
 
         res, err = c.calculating_cycle(set_length, set_data, set_res, i)
 
         res_arr.append(res)
 
-        population_with_err[i[0][0]] = err # потім тут буде хромосома з ваг. Можливо треба внормування err
+        population_with_err[tuple(new_chromosome)] = err # потім тут буде хромосома з ваг. Можливо треба внормування err
 
     return population_with_err
 
+def norm_fitness(population):
 
-def make_chromosome(neur_arr):
+    fit_arr = list(population.values())
 
-    return 0
+    chromosome_arr = list(population.keys())
+
+    min_fit = min(fit_arr)
+
+    new_dict = {}
+
+
+    i = 0
+
+    while i < len(fit_arr):
+
+        new_dict[chromosome_arr[i]] = min_fit/fit_arr[i] # подумати над формулою, аби мінімальне значення не мало ймовірності 1
+
+        i += 1
+
+    return new_dict
+
 
 def parent_selection(population):
 
-    # ideally roulette wheel selection
-    # prob_of_choice = 1/err (?)
+    # roulette wheel selection
+
+    print(population)
+
+    print()
+
+    normalized_fitness_population = norm_fitness(population)
+
+    print(normalized_fitness_population)
+
+    # тут обирати елементи значення з list(normalized_fitness_population.keys()) з певною ймовірністю list(normalized_fitness_population.values())
 
     return 0
 

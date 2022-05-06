@@ -46,10 +46,6 @@ class Neuron:
 
         return self.layer
 
-    def get_weights(self):
-
-        return self.weights
-
     def add_random_weights(self, num_next_layer_quant):
 
         i = 0
@@ -73,6 +69,10 @@ class Neuron:
     def get_weight(self, ind):
 
         return self.weights[ind]
+
+    def get_weights(self):
+
+        return self.weights
 
     def update_weight(self, ind, value):
 
