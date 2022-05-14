@@ -32,7 +32,7 @@ error_threshold = 0.001
 
 # оновлюються протягом роботи
 
-learning_algorithm = 1
+learning_algorithm = 1 # можливо замість чистого алгоритму, використати їх комбінацію? Спочатку запустити генетичний, а потім зворотного поширення
 
 neurons_created = 0
 
@@ -90,6 +90,7 @@ elif learning_algorithm == 1:
     la.genetic(neurons,  neuron_layer_quantity, tr_length, tr_set_data, tr_set_res, error_threshold)
 
 
+# як будувати графік?
 
 test_length = set_length
 

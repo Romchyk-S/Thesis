@@ -11,6 +11,8 @@ import calculations as c
 
 import random as r
 
+import numpy as np
+
 
 
 def create_initial_population(initial_population_length, neur_arr, neur_layer_arr):
@@ -35,7 +37,7 @@ def create_initial_population(initial_population_length, neur_arr, neur_layer_ar
 
 def make_chromosome(neur_arr):
 
-    chromosome = []
+    chromosome = ()
 
     for i in neur_arr:
 
@@ -45,7 +47,7 @@ def make_chromosome(neur_arr):
 
             for m in k:
 
-                chromosome.append(m)
+                chromosome += (m, )
 
     return chromosome
 
@@ -70,7 +72,7 @@ def create_chromosome_error_dict(initial_population, set_length, set_data, set_r
 
         res_arr.append(res)
 
-        population_with_err[tuple(new_chromosome)] = err # потім тут буде хромосома з ваг. Можливо треба внормування err
+        population_with_err[new_chromosome] = err
 
     return population_with_err
 
@@ -100,22 +102,54 @@ def parent_selection(population):
 
     # roulette wheel selection
 
-    print(population)
+    parents = r.choices(list(population.keys()), weights = list(population.values()), k = 2)
 
-    print()
+    return parents
 
-    normalized_fitness_population = norm_fitness(population)
+def crossover(chromosome_1, chromosome_2):
 
-    print(normalized_fitness_population)
+    len_crossover = r.randint(1, round(len(chromosome_1)/2))
 
-    # тут обирати елементи значення з list(normalized_fitness_population.keys()) з певною ймовірністю list(normalized_fitness_population.values())
+    quant_crossover = r.randint(1, round(len(chromosome_1)/(2*len_crossover)))
 
-    return 0
+    chromosome_1 = np.array_split(chromosome_1, round(len(chromosome_1)/(len_crossover)))
 
-def crossover(parent_1, parent_2):
+    chromosome_2 = np.array_split(chromosome_2, round(len(chromosome_2)/(len_crossover)))
 
-    return 0
+    i = 0
+
+    while i < quant_crossover:
+
+        ind = r.randint(0, len(chromosome_1)-1)
+
+        temp = chromosome_1[ind]
+
+        chromosome_1[ind] = chromosome_2[ind]
+
+        chromosome_2[ind] = temp
+
+        i += 1
+
+    i = 1
+
+    while i < len(chromosome_1):
+
+        chromosome_1[0] = np.concatenate((chromosome_1[0], chromosome_1[i]))
+
+        chromosome_2[0] = np.concatenate((chromosome_2[0], chromosome_2[i]))
+
+        del chromosome_1[i]
+
+        del chromosome_2[i]
+
+    chromosome_1 = tuple(map(tuple, chromosome_1))[0]
+
+    chromosome_2 = tuple(map(tuple, chromosome_2))[0]
+
+    return chromosome_1, chromosome_2
 
 def mutation(chromosome):
 
-    return 0
+    # обрати тип або їх комбінацію
+
+    return chromosome

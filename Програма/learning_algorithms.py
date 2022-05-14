@@ -9,7 +9,7 @@ import genetic_algorithm_functions as ga
 
 import calculations as c
 
-# import random as r
+import random as r
 
 
 def backpropagation_calculation(error_threshold, set_length, set_data, set_res, neur_arr, eta):
@@ -33,8 +33,6 @@ def backpropagation_learning(neur_arr, exp_res, res, eta):
     # як оновлювати bias?
 
     i = 0
-
-    # i->j, j->k, k->l
 
     while i < len(res):
 
@@ -101,44 +99,75 @@ def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, err_thresho
 
     count = 0
 
+    population_length = 10
+
+    population = ga.create_initial_population(population_length, neur_arr, neur_layer_arr)
+
+    population_with_err = ga.create_chromosome_error_dict(population, set_length, set_data, set_res)
+
+
     while error > err_threshold:
 
-        initial_population_length = 10
+        new_population = []
 
-        initial_population = ga.create_initial_population(initial_population_length, neur_arr, neur_layer_arr)
-
-        # print(initial_population)
+        normalized_fitness_population = ga.norm_fitness(population_with_err) # формулу всередині потрібно виправити
 
 
-        population_with_err = ga.create_chromosome_error_dict(initial_population, set_length, set_data, set_res)
+        while len(new_population) < population_length:
 
-        # print(population_with_err)
+            chromosome_1, chromosome_2 = ga.parent_selection(normalized_fitness_population)
 
-        # print()
+            print(chromosome_1)
 
-        # ці ще не працюють
+            print(chromosome_2)
+
+            print()
+
+            # для тесту роботи, у фінальному коді не буде
+
+            chromosome_1, chromosome_2 = ga.crossover(chromosome_1, chromosome_2)
+
+            print(chromosome_1)
+
+            print(chromosome_2)
+
+            print()
+
+            break
 
 
-        ga.parent_selection(population_with_err)
+            crossover_prob = 0 + r.random() * (1-0)
+
+            if crossover_prob > 0.1:
+
+                chromosome_1, chromosome_2 = ga.crossover(chromosome_1, chromosome_2)
 
 
-        # crossover_prob = 0 + r.random() * (1-0)
+            mutation_prob = 0 + r.random() * (1-0)
 
-        # if crossover_prob > 0.1:
+            if mutation_prob > 0.1:
 
-        #     ga.crossover()
+                chromosome_1 = ga.mutation(chromosome_1)
 
-        # mutation_prob = 0 + r.random() * (1-0)
 
-        # if mutation_prob > 0.1:
+            mutation_prob = 0 + r.random() * (1-0)
 
-        #     ga.mutation()
+            if mutation_prob > 0.1:
 
-        # чи зберігати батьків?
+                chromosome_2 = ga.mutation(chromosome_2)
 
-        # оновити population_with_err, утворити нове покоління
 
-        print()
+            new_population.append(chromosome_1)
+
+            new_population.append(chromosome_2)
+
+        # батьки збережуться, якщо не випаде ні мутація, ні схрещування
+
+        break
+
+        population = new_population
+
+        population_with_err = ga.create_chromosome_error_dict(population, set_length, set_data, set_res)
 
         err = min(list(population_with_err.values()))
 
@@ -147,5 +176,7 @@ def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, err_thresho
         count += 1
 
         break
+
+    # як розділяти найкращу хромосому для утворення нової мережі, чи зберігати декілька з них і запускати на їх базі навчання зворотним поширенням помилки
 
     return 0
