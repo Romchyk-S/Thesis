@@ -53,6 +53,8 @@ print(set_res)
 print()
 
 
+# є проблеми, якщо відсутні проміжні рівні
+
 layer_number, neuron_layer_quantity = cn.get_layer_num(entered_parms, out_parms)
 
 neurons = cn.create_neurons(entered_parms, out_parms, layer_number, neuron_layer_quantity)

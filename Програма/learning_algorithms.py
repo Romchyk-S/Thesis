@@ -95,18 +95,17 @@ def backpropagation_learning(neur_arr, exp_res, res, eta):
 
 def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, err_threshold):
 
-    error = 1
-
     count = 0
 
-    population_length = 10
+    population_length = 100
 
-    population = ga.create_initial_population(population_length, neur_arr, neur_layer_arr)
+    population_with_err = ga.create_initial_population(population_length, neur_arr, neur_layer_arr, set_length, set_data, set_res)
 
-    population_with_err = ga.create_chromosome_error_dict(population, set_length, set_data, set_res)
+    err = min(list(population_with_err.values()))
 
 
-    while error > err_threshold:
+
+    while err > err_threshold:
 
         new_population = []
 
@@ -116,25 +115,6 @@ def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, err_thresho
         while len(new_population) < population_length:
 
             chromosome_1, chromosome_2 = ga.parent_selection(normalized_fitness_population)
-
-            print(chromosome_1)
-
-            print(chromosome_2)
-
-            print()
-
-            # для тесту роботи, у фінальному коді не буде
-
-            chromosome_1, chromosome_2 = ga.crossover(chromosome_1, chromosome_2)
-
-            print(chromosome_1)
-
-            print(chromosome_2)
-
-            print()
-
-            break
-
 
             crossover_prob = 0 + r.random() * (1-0)
 
@@ -163,20 +143,32 @@ def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, err_thresho
 
         # батьки збережуться, якщо не випаде ні мутація, ні схрещування
 
-        break
+        population = new_population.copy()
 
-        population = new_population
+        population_with_err = {}
 
-        population_with_err = ga.create_chromosome_error_dict(population, set_length, set_data, set_res)
+        i = 0
+
+        while i < len(population):
+
+          new_neur_arr = ga.create_new_network(list(new_population[i]), neur_arr)
+
+          res, err = c.calculating_cycle(set_length, set_data, set_res, new_neur_arr)
+
+          population_with_err[population[i]] = err
+
+          i += 1
+
+        # print(len(population_with_err))
+
+        # print()
 
         err = min(list(population_with_err.values()))
-
-        print(err)
 
         count += 1
 
         break
 
-    # як розділяти найкращу хромосому для утворення нової мережі, чи зберігати декілька з них і запускати на їх базі навчання зворотним поширенням помилки
+    print(err)
 
-    return 0
+    return err

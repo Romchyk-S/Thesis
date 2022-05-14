@@ -7,6 +7,8 @@ Created on Tue May  3 10:18:44 2022
 
 import create_network as cn
 
+import neuron_class as nc
+
 import calculations as c
 
 import random as r
@@ -14,10 +16,9 @@ import random as r
 import numpy as np
 
 
+def create_initial_population(initial_population_length, neur_arr, neur_layer_arr, set_length, set_data, set_res):
 
-def create_initial_population(initial_population_length, neur_arr, neur_layer_arr):
-
-    initial_population = []
+    population_with_err = {}
 
     i = 0
 
@@ -25,15 +26,21 @@ def create_initial_population(initial_population_length, neur_arr, neur_layer_ar
 
         if i == 0:
 
-            initial_population.append(neur_arr.copy())
+            new_neur_arr = neur_arr.copy()
 
         else:
 
-            initial_population.append(cn.create_neurons(len(neur_arr[0]), len(neur_arr[-1]), len(neur_arr)-2, neur_layer_arr))
+            new_neur_arr = cn.create_neurons(len(neur_arr[0]), len(neur_arr[-1]), len(neur_arr)-2, neur_layer_arr)
+
+        res, err = c.calculating_cycle(set_length, set_data, set_res, new_neur_arr)
+
+        chromosome = make_chromosome(new_neur_arr)
+
+        population_with_err[chromosome] = err
 
         i += 1
 
-    return initial_population
+    return population_with_err
 
 def make_chromosome(neur_arr):
 
@@ -50,31 +57,6 @@ def make_chromosome(neur_arr):
                 chromosome += (m, )
 
     return chromosome
-
-def create_chromosome_error_dict(initial_population, set_length, set_data, set_res):
-
-    # err_arr = []
-
-    res_arr = []
-
-    population_with_err = {}
-
-    chromosomes = []
-
-
-    for i in initial_population:
-
-        new_chromosome = make_chromosome(i)
-
-        chromosomes.append(new_chromosome)
-
-        res, err = c.calculating_cycle(set_length, set_data, set_res, i)
-
-        res_arr.append(res)
-
-        population_with_err[new_chromosome] = err
-
-    return population_with_err
 
 def norm_fitness(population):
 
@@ -153,3 +135,33 @@ def mutation(chromosome):
     # обрати тип або їх комбінацію
 
     return chromosome
+
+def create_new_network(chromosome_arr, neur_arr):
+
+    i = 0
+
+    network = []
+
+    for i in neur_arr:
+
+        layer = []
+
+        for j in i:
+
+            weights_num = len(j.get_weights())
+
+            neuron = nc.Neuron(j.get_index(), j.get_layer())
+
+            neuron.add_weights_from_arr(chromosome_arr[0:weights_num])
+
+            layer.append(neuron)
+
+            del chromosome_arr[0:weights_num-1]
+
+        network.append(layer)
+
+    return network
+
+
+
+

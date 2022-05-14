@@ -47,8 +47,6 @@ def get_layer_num(parms_in, parms_out):
 
 def create_layer(num, quant, layer):
 
-    # print(num)
-
     i = 0
 
     arr = []
@@ -61,7 +59,11 @@ def create_layer(num, quant, layer):
 
     return arr
 
-def add_weights(neur_arr, neur_layer_arr):
+def add_weights(neur_arr, neur_layer_arr, *args):
+
+    if len(args) != 0:
+
+        weight_arr = args[0]
 
     for i in neur_arr:
 
@@ -69,13 +71,19 @@ def add_weights(neur_arr, neur_layer_arr):
 
             try:
 
-                j.add_random_weights(neur_layer_arr[j.get_layer()])
+                if len(args) == 0:
+
+                    j.add_random_weights(neur_layer_arr[j.get_layer()])
+
+                else:
+
+                    j.add_weights_from_arr(weight_arr[j.get_index()-1])
 
             except IndexError:
 
                 break
 
-def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr):
+def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, *args):
 
     neurons_created = 0
 
@@ -106,10 +114,12 @@ def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr):
         i += 1
 
 
-    add_weights(neur_arr, neur_layer_arr)
+    if len(args) == 0:
+
+        add_weights(neur_arr, neur_layer_arr)
+
+    else:
+
+        add_weights(neur_arr, neur_layer_arr, args[0])
 
     return neur_arr
-
-def copy_network(neur_arr):
-
-    return 0

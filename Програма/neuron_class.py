@@ -42,6 +42,10 @@ class Neuron:
 
         return f"{self.index}_{self.layer}"
 
+    def get_index(self):
+
+        return self.index
+
     def get_layer(self):
 
         return self.layer
