@@ -6,19 +6,11 @@ Created on Fri Apr 15 16:14:05 2022
 """
 
 
-def calculating_cycle(set_length, set_data, set_res, neur_arr):
+def calculating_cycle(set_data, set_res, neur_arr):
 
-    result = []
+    result = (calculate_result(neur_arr, set_data))
 
-    i = 0
-
-    while i < set_length:
-
-        result.append(calculate_result(neur_arr, set_data[i]))
-
-        i += 1
-
-    error = calculate_error(neur_arr, set_length, set_data, set_res, result)
+    error = calculate_error(neur_arr, set_data, set_res, result)
 
     return result, error
 
@@ -28,7 +20,7 @@ def calculate_result(neur_arr, in_arr):
 
     while i < len(neur_arr)-1:
 
-        in_arr = calculate_layer(neur_arr[i], neur_arr[i+1], in_arr).copy()
+        in_arr = calculate_layer(neur_arr[i], neur_arr[i+1], in_arr)
 
         i += 1
 
@@ -49,6 +41,10 @@ def calculate_layer(curr_layer, next_layer, in_arr):
 
             while j < len(weight_arr):
 
+                # print("weight")
+
+                # print(weight_arr)
+
                 exit_value = weight_arr[j] * in_arr[i] + curr_layer[i].get_bias()
 
                 curr_layer[i].set_exit_value(j, exit_value)
@@ -68,34 +64,38 @@ def calculate_layer(curr_layer, next_layer, in_arr):
 
             while j < len(res):
 
+                # next_layer[j].set_S(next_layer[j].get_S()+round(res[j], 3))
+
+                # print("res")
+
+                # print(res)
+
+                # print()
+
                 next_layer[j].set_S(res[j])
+
+                next_layer[j].set_der_value_for_backprop(next_layer[j].get_S())
 
                 res[j] = next_layer[j].get_activation_function_value(res[j])
 
                 j += 1
 
+            # print()
+
             i += 1
 
         return res
 
-def calculate_error(neur, length, data, exp_res, res):
+def calculate_error(neur, data, exp_res, res):
 
     i = 0
 
     err = 0
 
-    while i < length:
+    while i < len(exp_res):
 
-        j = 0
-
-        while j < len(res[i]):
-
-            err += (exp_res[i][j]-res[i][j])**2
-
-            j += 1
+        err += exp_res[i]-res[i]
 
         i += 1
-
-    err *= 1/2
 
     return err

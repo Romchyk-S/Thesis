@@ -7,6 +7,8 @@ Created on Fri Apr  8 16:49:15 2022
 
 import random as r
 
+import math as m
+
 # import activation_functions as af
 
 class Neuron:
@@ -20,6 +22,8 @@ class Neuron:
     error = 0
 
     S = 0
+
+    der_value_for_backprop = 0
 
     activ_func = 0 # подумати, як передавати її. Можливо масив функцій
 
@@ -98,7 +102,7 @@ class Neuron:
 
         try:
 
-            self.exit_values[ind] = value
+            self.exit_values[ind] += value
 
         except IndexError:
 
@@ -118,22 +122,72 @@ class Neuron:
 
     def get_activation_function_value(self, x): # обрати якусь кращу, можливо певним чином комбінувати різні для різних рівнів
 
+
+
         #Leaky ReLU
 
-        if x < 0:
+        # if x < 0:
 
-            return 0.01*x
+        #     return 0.01*x
 
-        else:
+        # else:
 
-            return x
+        #     return x
+
+        return (m.exp(x) - m.exp(-x))/(m.exp(x) + m.exp(-x))
 
     def get_activation_function_der_value(self, x):
 
-        if x < 0:
+        # print(x)
 
-            return 0.01
+        # x = round(x, 3)
 
-        else:
+        # print(x)
 
-            return 1
+        # print(m.exp(x))
+
+        # print(m.exp(-x))
+
+        # print(m.exp(x) - m.exp(-x))
+
+        # print(m.exp(x) + m.exp(-x))
+
+        # print()
+
+        # if x < 0:
+
+        #     return 0.01
+
+        # else:
+
+        #     return 1
+
+        # return 1 - (round((m.exp(x) - m.exp(-x)), 3)**2/(round((m.exp(x) + m.exp(-x)), 3)**2))
+
+        return 1 - (((m.exp(x) - m.exp(-x))**2)/((m.exp(x) + m.exp(-x))**2))
+
+    def set_der_value_for_backprop(self, x):
+
+        self.der_value_for_backprop += self.get_activation_function_der_value(x)
+
+    def get_der_value_for_backprop(self):
+
+        return self.der_value_for_backprop
+
+    def to_zero(self):
+
+        self.error = 0
+
+        self.der_value_for_backprop = 0
+
+        self.S = 0
+
+        i = 0
+
+        while i < len(self.exit_values):
+
+            self.exit_values[i] = 0
+
+            i += 1
+
+

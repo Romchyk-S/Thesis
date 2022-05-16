@@ -17,7 +17,7 @@ print()
 
 # неоновлювані протягом роботи параметри
 
-set_length = 1 # неправильно обчислює, якщо більше за 1, ваги нейронів стають більші за 1. Може, шукати через загальну похибку мережі?
+set_length = 200
 
 eta = 0.005
 
@@ -25,14 +25,14 @@ entered_parms = 5
 
 out_parms = 1
 
-error = 10
+error_threshold = 0.1
 
-error_threshold = 0.001
+batch_length = 5
 
 
 # оновлюються протягом роботи
 
-learning_algorithm = 1 # можливо замість чистого алгоритму, використати їх комбінацію? Спочатку запустити генетичний, а потім зворотного поширення
+learning_algorithm = 0 # можливо замість чистого алгоритму, використати їх комбінацію? Спочатку запустити генетичний, а потім зворотного поширення
 
 neurons_created = 0
 
@@ -76,14 +76,29 @@ tr_set_res = set_res.copy()
 
 if learning_algorithm == 0:
 
-    res, err, count = la.backpropagation_calculation(error_threshold, tr_length, tr_set_data, tr_set_res, neurons, eta)
+    res, err, epochs = la.backpropagation_calculation(error_threshold, tr_set_data, tr_set_res, neurons, eta, batch_length)
 
+    i = 0
 
-    print(res)
+    while i < len(res):
 
-    print(err)
+        j = 0
 
-    print(count)
+        while j < len(res[i]):
+
+            res[i][j] = round(res[i][j], 3)
+
+            j += 1
+
+        i += 1
+
+    print(f"Отриманий результат: {res}")
+
+    print(f"Вихід: {set_res}")
+
+    print(f"Похибка: {err}")
+
+    print(f"Кількість епох навчання: {epochs}")
 
     print()
 

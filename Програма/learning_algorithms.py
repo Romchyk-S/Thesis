@@ -12,23 +12,94 @@ import calculations as c
 import random as r
 
 
-def backpropagation_calculation(error_threshold, set_length, set_data, set_res, neur_arr, eta):
+def backpropagation_calculation(error_threshold, set_data, set_res, neur_arr, eta, batch):
+
+    print()
 
     error = 1
 
+    err_for_backprop = 0
+
     count = 0
+
 
     while error > error_threshold:
 
-        result, error = c.calculating_cycle(set_length, set_data, set_res, neur_arr)
+        result = []
 
-        backpropagation_learning(neur_arr, set_res, result, eta)
+        i = 0
+
+        while i < len(set_data):
+
+            res, error_for_i = c.calculating_cycle(set_data[i], set_res[i], neur_arr)
+
+            if i == batch:
+
+                backpropagation_learning(neur_arr, result, eta, err_for_backprop)
+
+            # res[0] = res[0]
+
+            error_for_i = round(error_for_i, 3)
+
+            result.append(res)
+
+            if i == 0:
+
+                try:
+
+                    error = error_for_i**2
+
+                    err_for_backprop = error_for_i
+
+                except OverflowError:
+
+                    print("err_i")
+
+                    print(error_for_i)
+
+                    break
+
+            else:
+
+                error += error_for_i**2
+
+                err_for_backprop += error_for_i
+
+            i += 1
+
+        error /= len(set_res)
+
+        # error *= 1/2
+
+        # if count%100 == 0:
+
+        #     # print(neur_arr[0][0].get_weights())
+
+        #     print("error")
+
+        #     print(error)
+
+        #     print()
+
+        #     # print("error_for_backprop")
+
+        #     # print(err_for_backprop)
+
+        #     print("result")
+
+        #     print(result)
+
+        #     # print()
+
+        # if count >= 10000:
+
+        #     break
 
         count += 1
 
     return result, error, count
 
-def backpropagation_learning(neur_arr, exp_res, res, eta):
+def backpropagation_learning(neur_arr, res, eta, err):
 
     # як оновлювати bias?
 
@@ -46,7 +117,15 @@ def backpropagation_learning(neur_arr, exp_res, res, eta):
 
                 if j == len(neur_arr)-1:
 
-                    neur_arr[j][k].set_error(exp_res[i][k]-res[i][k])
+                    # print("Here is error")
+
+                    # print(neur_arr[j][k].get_error())
+
+                    neur_arr[j][k].set_error(err)
+
+                    # print(neur_arr[j][k].get_error())
+
+                    # print()
 
                 else:
 
@@ -58,31 +137,37 @@ def backpropagation_learning(neur_arr, exp_res, res, eta):
 
                         l += 1
 
-                # зберегли помилку
-                # похідна функції активації в точці
 
-                f_der = neur_arr[j][k].get_activation_function_der_value(neur_arr[j][k].get_S())
+                f_der = neur_arr[j][k].get_der_value_for_backprop()
 
-                delta_w_temp = eta*neur_arr[j][k].get_error()*f_der
+                # print("delta_w_temp")
 
+                # print(neur_arr[j][k].get_error())
 
-                # знайти значення, яке нейрон передав на наступний рівень, оновити вагу
+                # print(f_der)
+
+                delta_w_temp = neur_arr[j][k].get_error()*f_der
+
 
                 l = 0
 
                 while l < len(neur_arr[j-1]):
 
+                    # print(delta_w_temp)
+
                     delta_w = delta_w_temp*neur_arr[j-1][l].get_exit_value(k)
-
-                    # print(j-1)
-
-                    # print(l)
 
                     # print(delta_w)
 
-                    # print()
+                    # print(-eta*delta_w)
 
-                    neur_arr[j-1][l].update_weight(k, delta_w)
+                    # print(neur_arr[j-1][l].get_weight(k))
+
+                    neur_arr[j-1][l].update_weight(k, eta*delta_w)
+
+                    # print(neur_arr[j-1][l].get_weight(k))
+
+                    # print()
 
                     l += 1
 
@@ -92,6 +177,12 @@ def backpropagation_learning(neur_arr, exp_res, res, eta):
             j -= 1
 
         i += 1
+
+        for n in neur_arr:
+
+            for m in n:
+
+                m.to_zero()
 
 def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, err_threshold):
 
