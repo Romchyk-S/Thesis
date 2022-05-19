@@ -27,7 +27,6 @@ class Neuron:
 
     activ_func = 0 # подумати, як передавати її. Можливо масив функцій
 
-
     def __init__ (self, num_ind, num_layer):
 
         self.index = num_ind
@@ -54,11 +53,11 @@ class Neuron:
 
         return self.layer
 
-    def add_random_weights(self, num_next_layer_quant):
+    def add_random_weights(self, next_layer_quant):
 
         i = 0
 
-        while i < num_next_layer_quant:
+        while i < next_layer_quant:
 
             self.weights.append(round(0 + (r.random() * (1 - 0)), 2))
 
@@ -90,6 +89,14 @@ class Neuron:
 
         return self.bias
 
+    def update_bias(self, value):
+
+        self.bias += value
+
+    def set_bias(self, value):
+
+        self.bias = value
+
     def set_error(self, value):
 
         self.error += value
@@ -97,6 +104,10 @@ class Neuron:
     def get_error(self):
 
         return self.error
+
+    def get_exit_values(self):
+
+        return self.exit_values
 
     def set_exit_value(self, ind, value):
 
@@ -112,6 +123,10 @@ class Neuron:
 
         return self.exit_values[ind]
 
+    def update_S(self, value):
+
+        self.S += value
+
     def set_S(self, value):
 
         self.S = value
@@ -120,9 +135,13 @@ class Neuron:
 
         return self.S
 
+    def set_activation_function(self, func):
+
+        self.activ_func = func
+
+        self.activ_func_der = 0 # Теж подумати
+
     def get_activation_function_value(self, x): # обрати якусь кращу, можливо певним чином комбінувати різні для різних рівнів
-
-
 
         #Leaky ReLU
 
@@ -136,23 +155,10 @@ class Neuron:
 
         return (m.exp(x) - m.exp(-x))/(m.exp(x) + m.exp(-x))
 
+        # return self.activ_func(x)
+
     def get_activation_function_der_value(self, x):
 
-        # print(x)
-
-        # x = round(x, 3)
-
-        # print(x)
-
-        # print(m.exp(x))
-
-        # print(m.exp(-x))
-
-        # print(m.exp(x) - m.exp(-x))
-
-        # print(m.exp(x) + m.exp(-x))
-
-        # print()
 
         # if x < 0:
 
@@ -164,7 +170,19 @@ class Neuron:
 
         # return 1 - (round((m.exp(x) - m.exp(-x)), 3)**2/(round((m.exp(x) + m.exp(-x)), 3)**2))
 
-        return 1 - (((m.exp(x) - m.exp(-x))**2)/((m.exp(x) + m.exp(-x))**2))
+        try:
+
+            return 1 - (((m.exp(x) - m.exp(-x))**2)/((m.exp(x) + m.exp(-x))**2))
+
+        except OverflowError:
+
+            print(self.get_weights())
+
+            print(x)
+
+            print()
+
+        # return self.activ_func_der(x)
 
     def set_der_value_for_backprop(self, x):
 
@@ -182,12 +200,4 @@ class Neuron:
 
         self.S = 0
 
-        i = 0
-
-        while i < len(self.exit_values):
-
-            self.exit_values[i] = 0
-
-            i += 1
-
-
+        self.exit_values = []

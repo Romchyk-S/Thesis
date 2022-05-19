@@ -9,10 +9,16 @@ import create_network as cn
 
 import get_data as gd
 
-import learning_algorithms as la
+import calculations as c
+
+import matplotlib.pyplot as plt
 
 
 print()
+
+# Notice that because deltas are accumulated over all training items, the order in which training data
+# is processed doesn't matter, as opposed to online training where it's critically important to visit items
+# IN A RANDOM ORDER.
 
 
 # неоновлювані протягом роботи параметри
@@ -25,14 +31,16 @@ entered_parms = 5
 
 out_parms = 1
 
-error_threshold = 0.1
+error_threshold = 0.01
 
-batch_length = 5
+epochs_threshold = 100
+
+u = 1 # краще різні для обох алгоритмів
 
 
 # оновлюються протягом роботи
 
-learning_algorithm = 0 # можливо замість чистого алгоритму, використати їх комбінацію? Спочатку запустити генетичний, а потім зворотного поширення
+learning_algorithm = 1 # можливо замість чистого алгоритму, використати їх комбінацію? Спочатку запустити генетичний, а потім зворотного поширення
 
 neurons_created = 0
 
@@ -73,38 +81,31 @@ tr_set_data = set_data.copy()
 tr_set_res = set_res.copy()
 
 
+res, err, epochs = c.learning_process(error_threshold, epochs_threshold, set_data, set_res, neurons, neuron_layer_quantity, eta, u, learning_algorithm)
 
-if learning_algorithm == 0:
+i = 0
 
-    res, err, epochs = la.backpropagation_calculation(error_threshold, tr_set_data, tr_set_res, neurons, eta, batch_length)
+while i < len(res):
 
-    i = 0
+    j = 0
 
-    while i < len(res):
+    while j < len(res[i]):
 
-        j = 0
+        res[i][j] = round(res[i][j], 3)
 
-        while j < len(res[i]):
+        j += 1
 
-            res[i][j] = round(res[i][j], 3)
+    i += 1
 
-            j += 1
+# print(f"Очікуваний вихід: {set_res}")
 
-        i += 1
+print(f"Отриманий результат: {res}")
 
-    print(f"Отриманий результат: {res}")
+print(f"Похибка: {err[-1]}")
 
-    print(f"Вихід: {set_res}")
+print(f"Кількість епох навчання: {epochs}")
 
-    print(f"Похибка: {err}")
-
-    print(f"Кількість епох навчання: {epochs}")
-
-    print()
-
-elif learning_algorithm == 1:
-
-    la.genetic(neurons,  neuron_layer_quantity, tr_length, tr_set_data, tr_set_res, error_threshold)
+print()
 
 
 # як будувати графік?
@@ -116,5 +117,39 @@ test_set_data = set_data.copy()
 test_set_res = set_res.copy()
 
 
+plt.figure(1)
+
+i = 0
+
+while i < len(res):
+
+    plt.scatter(set_data[i][0], set_res[i], c = "red")
+
+    plt.scatter(set_data[i][0], res[i], c = "blue")
+
+    i += 1
+
+plt.show()
 
 
+plt.figure(2)
+
+i = 0
+
+x = []
+
+y = []
+
+while i < len(err):
+
+    x.append(i)
+
+    y.append(err[i])
+
+    # plt.scatter(i, err[i], c = "blue")
+
+    i += 1
+
+plt.plot(x, y)
+
+plt.show()
