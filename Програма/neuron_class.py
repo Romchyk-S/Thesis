@@ -23,8 +23,6 @@ class Neuron:
 
     S = 0
 
-    der_value_for_backprop = 0
-
     activ_func = 0 # подумати, як передавати її. Можливо масив функцій
 
     def __init__ (self, num_ind, num_layer):
@@ -184,19 +182,9 @@ class Neuron:
 
         # return self.activ_func_der(x)
 
-    def set_der_value_for_backprop(self, x):
-
-        self.der_value_for_backprop += self.get_activation_function_der_value(x)
-
-    def get_der_value_for_backprop(self):
-
-        return self.der_value_for_backprop
-
     def to_zero(self):
 
         self.error = 0
-
-        self.der_value_for_backprop = 0
 
         self.S = 0
 

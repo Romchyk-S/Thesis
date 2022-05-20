@@ -160,6 +160,30 @@ def mutation(chromosome):
 
     return chromosome
 
+def offsprings_creation(normalized_fitness_population):
+
+    chromosome_1, chromosome_2 = parent_selection(normalized_fitness_population)
+
+    crossover_prob = 0 + r.random() * (1-0)
+
+    if crossover_prob > 0.1:
+
+        chromosome_1, chromosome_2 = crossover(chromosome_1, chromosome_2)
+
+    mutation_prob = 0 + r.random() * (1-0)
+
+    if mutation_prob > 0.1:
+
+        chromosome_1 = mutation(chromosome_1)
+
+    mutation_prob = 0 + r.random() * (1-0)
+
+    if mutation_prob > 0.1:
+
+        chromosome_2 = mutation(chromosome_2)
+
+    return chromosome_1, chromosome_2
+
 def create_new_network(chromosome, neur_arr):
 
     i = 0
@@ -185,7 +209,6 @@ def create_new_network(chromosome, neur_arr):
         network.append(layer)
 
     return network
-
 
 def choose_best_network(population, neur_arr, set_data, set_res):
 
