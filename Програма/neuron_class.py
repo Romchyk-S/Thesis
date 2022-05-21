@@ -57,7 +57,7 @@ class Neuron:
 
         while i < next_layer_quant:
 
-            self.weights.append(round(0 + (r.random() * (1 - 0)), 2))
+            self.weights.append(round(-1 + (r.random() * (1 - (-1))), 2))
 
             i += 1
 

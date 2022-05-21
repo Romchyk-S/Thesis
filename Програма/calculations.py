@@ -7,7 +7,6 @@ Created on Fri Apr 15 16:14:05 2022
 
 import learning_algorithms as la
 
-
 def calculate_layer(curr_layer, next_layer, in_arr, learning_algorithm):
 
         res = []
@@ -45,8 +44,6 @@ def calculate_layer(curr_layer, next_layer, in_arr, learning_algorithm):
                 res[j] = next_layer[j].get_activation_function_value(res[j])
 
                 j += 1
-
-            # print()
 
             i += 1
 
@@ -190,3 +187,31 @@ def learning_process(error_threshold, epochs_threshold, set_data, set_res, neur_
         count += 1
 
     return result, err_arr, count
+
+def calculate_test_set(neur_arr, set_data, set_res):
+
+    result = []
+
+    i = 0
+
+    while i < len(set_data):
+
+        res, error_for_i = calculating_cycle(set_data[i], set_res[i], neur_arr, 1)
+
+        error_for_i = round(error_for_i, 3)
+
+        result.append(res)
+
+        if i == 0:
+
+            error = error_for_i**2
+
+        else:
+
+            error += error_for_i**2
+
+        i += 1
+
+    error /= len(set_res)
+
+    return result, error
