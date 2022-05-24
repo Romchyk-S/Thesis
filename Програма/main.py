@@ -33,9 +33,11 @@ out_parms = 1
 
 error_threshold = 0.01
 
-epochs_threshold = 100
+epochs_threshold = 500
 
-u = 1 # краще різні для обох алгоритмів
+weight_bottom = -1
+
+weight_upper = 1
 
 
 # оновлюються протягом роботи
@@ -49,30 +51,6 @@ neurons = []
 
 set_data, set_res = gd.get_dataset(set_length, entered_parms)
 
-
-# print("Вхід:")
-
-# print(set_data)
-
-# print("Вихід:")
-
-# print(set_res)
-
-# print()
-
-
-# є проблеми, якщо відсутні проміжні рівні
-
-layer_number, neuron_layer_quantity = cn.get_layer_num(entered_parms, out_parms)
-
-neurons = cn.create_neurons(entered_parms, out_parms, layer_number, neuron_layer_quantity)
-
-print(neurons)
-
-print()
-
-tr_length = set_length
-
 tr_set_data = set_data[::2]
 
 tr_set_res = set_res[::2]
@@ -80,6 +58,17 @@ tr_set_res = set_res[::2]
 test_set_data = set_data[1::2]
 
 test_set_res = set_res[1::2]
+
+# u = len(tr_set_data)
+
+u = 1
+
+
+# є проблеми, якщо відсутні проміжні рівні
+
+layer_number, neuron_layer_quantity = cn.get_layer_num(entered_parms, out_parms)
+
+neurons = cn.create_neurons(entered_parms, out_parms, layer_number, neuron_layer_quantity, [weight_bottom, weight_upper])
 
 
 print("Навчальна вибірка")
@@ -95,7 +84,7 @@ print(tr_set_res)
 print()
 
 
-tr_res, tr_err, epochs = c.learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neurons, neuron_layer_quantity, eta, u, learning_algorithm)
+tr_res, tr_err, epochs = c.learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neurons, neuron_layer_quantity, eta, u, learning_algorithm, weight_bottom, weight_upper)
 
 i = 0
 
@@ -110,7 +99,6 @@ while i < len(tr_res):
         j += 1
 
     i += 1
-
 
 print(f"Отриманий результат: {tr_res}")
 
@@ -155,7 +143,7 @@ while i < len(tr_err):
 
     y.append(tr_err[i])
 
-    plt.scatter(i, tr_err[i])
+    # plt.scatter(i, tr_err[i])
 
     i += 1
 

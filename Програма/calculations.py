@@ -105,7 +105,7 @@ def calculating_cycle(set_data, set_res, neur_arr, learning_algorithm):
 
         return result, error
 
-def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delta_w, learning_algorithm):
+def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delta_w, learning_algorithm, w_bottom, w_upper):
 
     result = []
 
@@ -145,17 +145,22 @@ def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delt
 
                     m.set_S(0)
 
+        if (i+1)%batch == 0 and learning_algorithm == 1:
+
+            neur_arr = la.genetic(neur_arr, neur_layer_arr, len(set_res), set_data, set_res, w_bottom, w_upper)
+
         i += 1
 
     error /= len(set_res)
 
     if learning_algorithm == 1:
 
-        neur_arr = la.genetic(neur_arr, neur_layer_arr, len(set_res), set_data, set_res)
+        return neur_arr, result, error, delta_w
 
     return result, error, delta_w
 
-def learning_process(error_threshold, epochs_threshold, set_data, set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm):
+
+def learning_process(error_threshold, epochs_threshold, set_data, set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm, w_bottom, w_upper):
 
     error = 1
 
@@ -180,7 +185,14 @@ def learning_process(error_threshold, epochs_threshold, set_data, set_res, neur_
 
     while error > error_threshold and count < epochs_threshold:
 
-        result, error, delta_w = learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delta_w, learning_algorithm)
+        if learning_algorithm == 0:
+
+            result, error, delta_w = learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delta_w, learning_algorithm, w_bottom, w_upper)
+
+        else:
+
+            neur_arr, result, error, delta_w = learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delta_w, learning_algorithm, w_bottom, w_upper)
+
 
         err_arr.append(error)
 

@@ -26,21 +26,20 @@ def backpropagation(neur_arr, res, eta, err, batch, iteration, delta_w_arr):
 
     return delta_w_arr
 
-def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res):
+def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper):
 
     population_length = 100
 
     new_population = []
 
-
-    population_with_err = ga.create_initial_population(population_length, neur_arr, neur_layer_arr, set_length, set_data, set_res)
+    population_with_err = ga.create_initial_population(population_length, neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper)
 
     normalized_fitness_population = ga.norm_fitness(population_with_err) # формулу всередині потрібно виправити
 
 
     while len(new_population) < population_length:
 
-        chromosome_1, chromosome_2 = ga.offsprings_creation(normalized_fitness_population)
+        chromosome_1, chromosome_2 = ga.offsprings_creation(normalized_fitness_population, w_bottom, w_upper)
 
         new_population.append(chromosome_1)
 

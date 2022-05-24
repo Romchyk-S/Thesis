@@ -32,7 +32,7 @@ def make_chromosome(neur_arr):
 
     return chromosome
 
-def create_initial_population(initial_population_length, neur_arr, neur_layer_arr, set_length, set_data, set_res):
+def create_initial_population(initial_population_length, neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper):
 
     population_with_err = {}
 
@@ -48,7 +48,7 @@ def create_initial_population(initial_population_length, neur_arr, neur_layer_ar
 
         else:
 
-            new_neur_arr = cn.create_neurons(len(neur_arr[0]), len(neur_arr[-1]), len(neur_arr)-2, neur_layer_arr)
+            new_neur_arr = cn.create_neurons(len(neur_arr[0]), len(neur_arr[-1]), len(neur_arr)-2, neur_layer_arr, w_bottom, w_upper)
 
         j = 0
 
@@ -69,7 +69,6 @@ def create_initial_population(initial_population_length, neur_arr, neur_layer_ar
         i += 1
 
     return population_with_err
-
 
 def norm_fitness(population):
 
@@ -124,9 +123,7 @@ def crossover(chromosome_1, chromosome_2):
     ind_arr = r.sample(temp_arr, quant_crossover)
 
 
-    i = 0
-
-    while i < len(ind_arr):
+    for i in ind_arr:
 
         temp = chromosome_1[i]
 
@@ -134,7 +131,6 @@ def crossover(chromosome_1, chromosome_2):
 
         chromosome_2[i] = temp
 
-        i += 1
 
     i = 1
 
@@ -154,13 +150,49 @@ def crossover(chromosome_1, chromosome_2):
 
     return chromosome_1, chromosome_2
 
-def mutation(chromosome):
+def mutation(chromosome, w_bottom, w_upper):
+
+    # random resetting
+
+    chromosome = list(chromosome)
+
+    quant_mutation = r.randint(1, round(len(chromosome)/3))
+
+    # quant_mutation = r.randint(1, round(len(chromosome)/(2*len_mutation)))
+
+    temp_arr = []
+
+    i = 0
+
+    while i < len(chromosome):
+
+        temp_arr.append(i)
+
+        i += 1
+
+    ind_arr = r.sample(temp_arr, quant_mutation)
+
+    # print("Mutation")
+
+    # print(len(chromosome))
+
+    # print(quant_mutation)
+
+    # print(ind_arr)
+
+    # print()
+
+    for i in ind_arr:
+
+        chromosome[i] = round(w_bottom + (r.random() * (w_upper - (w_bottom))), 2)
 
     # обрати тип або їх комбінацію
 
+    chromosome = tuple(chromosome)
+
     return chromosome
 
-def offsprings_creation(normalized_fitness_population):
+def offsprings_creation(normalized_fitness_population, w_bottom, w_upper):
 
     chromosome_1, chromosome_2 = parent_selection(normalized_fitness_population)
 
@@ -172,15 +204,15 @@ def offsprings_creation(normalized_fitness_population):
 
     mutation_prob = 0 + r.random() * (1-0)
 
-    if mutation_prob > 0.1:
+    if mutation_prob > 0.5:
 
-        chromosome_1 = mutation(chromosome_1)
+        chromosome_1 = mutation(chromosome_1, w_bottom, w_upper)
 
     mutation_prob = 0 + r.random() * (1-0)
 
-    if mutation_prob > 0.1:
+    if mutation_prob > 0.5:
 
-        chromosome_2 = mutation(chromosome_2)
+        chromosome_2 = mutation(chromosome_2, w_bottom, w_upper)
 
     return chromosome_1, chromosome_2
 
@@ -239,6 +271,8 @@ def choose_best_network(population, neur_arr, set_data, set_res):
       population_with_err[population[i]] = err
 
       i += 1
+
+
 
     dict_values_list = list(population_with_err.values())
 

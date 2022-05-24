@@ -61,23 +61,19 @@ def create_layer(num, quant, layer):
 
 def add_weights(neur_arr, neur_layer_arr, *args):
 
-    if len(args) != 0:
-
-        weight_arr = args[0]
-
     for i in neur_arr:
 
         for j in i:
 
             try:
 
-                if len(args) == 0:
+                if len(args) == 2:
 
-                    j.add_random_weights(neur_layer_arr[j.get_layer()])
+                    j.add_random_weights(neur_layer_arr[j.get_layer()], args[0], args[1])
 
                 else:
 
-                    j.add_weights_from_arr(weight_arr[j.get_index()-1])
+                    j.add_weights_from_arr(args[0][j.get_index()-1])
 
             except IndexError:
 
@@ -114,9 +110,13 @@ def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, *args):
         i += 1
 
 
-    if len(args) == 0:
+    if len(args) == 2:
 
-        add_weights(neur_arr, neur_layer_arr)
+        add_weights(neur_arr, neur_layer_arr, args[0], args[1])
+
+    elif len(args[0]) == 2:
+
+        add_weights(neur_arr, neur_layer_arr, args[0][0], args[0][1])
 
     else:
 
