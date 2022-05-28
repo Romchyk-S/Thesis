@@ -5,6 +5,8 @@ Created on Wed Feb 23 09:54:02 2022
 @author: romas
 """
 
+import activation_functions as af
+
 import create_network as cn
 
 import get_data as gd
@@ -42,7 +44,7 @@ weight_upper = 1
 
 # оновлюються протягом роботи
 
-learning_algorithm = 0 # можливо замість чистого алгоритму, використати їх комбінацію? Спочатку запустити генетичний, а потім зворотного поширення
+learning_algorithm = 1 # можливо замість чистого алгоритму, використати їх комбінацію? Спочатку запустити генетичний, а потім зворотного поширення
 
 neurons_created = 0
 
@@ -59,7 +61,7 @@ test_set_data = set_data[1::2]
 
 test_set_res = set_res[1::2]
 
-# u = len(tr_set_data)
+u = len(tr_set_data)
 
 u = 1
 

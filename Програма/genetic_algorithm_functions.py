@@ -172,16 +172,6 @@ def mutation(chromosome, w_bottom, w_upper):
 
     ind_arr = r.sample(temp_arr, quant_mutation)
 
-    # print("Mutation")
-
-    # print(len(chromosome))
-
-    # print(quant_mutation)
-
-    # print(ind_arr)
-
-    # print()
-
     for i in ind_arr:
 
         chromosome[i] = round(w_bottom + (r.random() * (w_upper - (w_bottom))), 2)
