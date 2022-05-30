@@ -30,9 +30,11 @@ def make_chromosome(neur_arr):
 
                 chromosome += (m, )
 
+            chromosome += (j.get_bias(), )
+
     return chromosome
 
-def create_initial_population(initial_population_length, neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper):
+def create_initial_population(initial_population_length, neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper, func_arr, func_der_arr):
 
     population_with_err = {}
 
@@ -48,7 +50,9 @@ def create_initial_population(initial_population_length, neur_arr, neur_layer_ar
 
         else:
 
-            new_neur_arr = cn.create_neurons(len(neur_arr[0]), len(neur_arr[-1]), len(neur_arr)-2, neur_layer_arr, w_bottom, w_upper)
+            # якщо робити еволюцію у вигляді зміни активаційних функцій, це робити тут, обираючи інші функції зі списку. Але на це нема часу.
+
+            new_neur_arr = cn.create_neurons(len(neur_arr[0]), len(neur_arr[-1]), len(neur_arr)-2, neur_layer_arr, func_arr, func_der_arr, w_bottom, w_upper)
 
         j = 0
 
@@ -144,6 +148,8 @@ def crossover(chromosome_1, chromosome_2):
 
         del chromosome_2[i]
 
+
+
     chromosome_1 = tuple(map(tuple, chromosome_1))[0]
 
     chromosome_2 = tuple(map(tuple, chromosome_2))[0]
@@ -157,8 +163,6 @@ def mutation(chromosome, w_bottom, w_upper):
     chromosome = list(chromosome)
 
     quant_mutation = r.randint(1, round(len(chromosome)/3))
-
-    # quant_mutation = r.randint(1, round(len(chromosome)/(2*len_mutation)))
 
     temp_arr = []
 
@@ -175,8 +179,6 @@ def mutation(chromosome, w_bottom, w_upper):
     for i in ind_arr:
 
         chromosome[i] = round(w_bottom + (r.random() * (w_upper - (w_bottom))), 2)
-
-    # обрати тип або їх комбінацію
 
     chromosome = tuple(chromosome)
 
@@ -220,13 +222,17 @@ def create_new_network(chromosome, neur_arr):
 
             weights_num = len(j.get_weights())
 
-            neuron = nc.Neuron(j.get_index(), j.get_layer())
+            neuron = nc.Neuron(j.get_index(), j.get_layer(), j.get_activation_function(), j.get_activation_function_der())
 
             neuron.add_weights_from_arr(chromosome[0:weights_num])
 
-            layer.append(neuron)
-
             del chromosome[0:weights_num-1]
+
+            neuron.set_bias(chromosome[0])
+
+            del chromosome[0]
+
+            layer.append(neuron)
 
         network.append(layer)
 
@@ -261,7 +267,6 @@ def choose_best_network(population, neur_arr, set_data, set_res):
       population_with_err[population[i]] = err
 
       i += 1
-
 
 
     dict_values_list = list(population_with_err.values())

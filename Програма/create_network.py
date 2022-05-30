@@ -45,7 +45,7 @@ def get_layer_num(parms_in, parms_out):
 
     return layer_num, neur_layer_arr
 
-def create_layer(num, quant, layer):
+def create_layer(num, quant, layer, func, func_der):
 
     i = 0
 
@@ -53,7 +53,7 @@ def create_layer(num, quant, layer):
 
     while i < num:
 
-        arr.append(nc.Neuron(quant+i, layer))
+        arr.append(nc.Neuron(quant+i, layer, func, func_der))
 
         i += 1
 
@@ -79,11 +79,19 @@ def add_weights(neur_arr, neur_layer_arr, *args):
 
                 break
 
-def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, *args):
+def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, func_arr, func_der_arr, *args):
 
     neurons_created = 0
 
     neur_arr = []
+
+    # потрібен ефективніший спосіб
+
+    activ_func_index_in = 5 #sigmoid
+
+    activ_func_index_out = 5 #sigmoid
+
+    activ_func_index_hidden = 5 #sigmoid
 
     i = 0
 
@@ -91,35 +99,32 @@ def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, *args):
 
         if i == 0:
 
-            neur_arr.append(create_layer(parms_in, neurons_created+1, i+1))
+            neur_arr.append(create_layer(parms_in, neurons_created+1, i+1, func_arr[activ_func_index_in], func_der_arr[activ_func_index_in]))
 
             neurons_created += parms_in
 
         elif i == layer_num+1:
 
-            neur_arr.append(create_layer(parms_out, neurons_created+1, i+1))
+            neur_arr.append(create_layer(parms_out, neurons_created+1, i+1, func_arr[activ_func_index_out], func_der_arr[activ_func_index_in]))
 
             neurons_created += parms_out
 
         else:
 
-            neur_arr.append(create_layer(neur_layer_arr[i], neurons_created+1, i+1))
+            neur_arr.append(create_layer(neur_layer_arr[i], neurons_created+1, i+1, func_arr[activ_func_index_hidden], func_der_arr[activ_func_index_hidden]))
 
             neurons_created += neur_layer_arr[i]
 
         i += 1
 
+    if len(args) > 0:
 
-    if len(args) == 2:
+        if len(args) == 2:
 
-        add_weights(neur_arr, neur_layer_arr, args[0], args[1])
+            add_weights(neur_arr, neur_layer_arr, args[0], args[1])
 
-    elif len(args[0]) == 2:
+        else:
 
-        add_weights(neur_arr, neur_layer_arr, args[0][0], args[0][1])
-
-    else:
-
-        add_weights(neur_arr, neur_layer_arr, args[0])
+            add_weights(neur_arr, neur_layer_arr, args[0])
 
     return neur_arr

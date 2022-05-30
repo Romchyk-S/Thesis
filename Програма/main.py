@@ -5,18 +5,44 @@ Created on Wed Feb 23 09:54:02 2022
 @author: romas
 """
 
+import inspect as insp
+
 import activation_functions as af
 
 import create_network as cn
 
 import get_data as gd
 
-import calculations as c
+import calculations as calc
 
-import matplotlib.pyplot as plt
+import copy as c
+
 
 
 print()
+
+
+functions_list = insp.getmembers(af, insp.isfunction)
+
+activ_funcs = []
+
+activ_funcs_ders = []
+
+i = 0
+
+while i < len(functions_list):
+
+    if i%2 == 0:
+
+        activ_funcs.append(functions_list[i][1])
+
+    else:
+
+        activ_funcs_ders.append(functions_list[i][1])
+
+    i += 1
+
+
 
 # Notice that because deltas are accumulated over all training items, the order in which training data
 # is processed doesn't matter, as opposed to online training where it's critically important to visit items
@@ -35,16 +61,12 @@ out_parms = 1
 
 error_threshold = 0.01
 
-epochs_threshold = 500
+epochs_threshold = 150
 
 weight_bottom = -1
 
 weight_upper = 1
 
-
-# оновлюються протягом роботи
-
-learning_algorithm = 1 # можливо замість чистого алгоритму, використати їх комбінацію? Спочатку запустити генетичний, а потім зворотного поширення
 
 neurons_created = 0
 
@@ -61,16 +83,17 @@ test_set_data = set_data[1::2]
 
 test_set_res = set_res[1::2]
 
-u = len(tr_set_data)
-
-u = 1
-
 
 # є проблеми, якщо відсутні проміжні рівні
 
 layer_number, neuron_layer_quantity = cn.get_layer_num(entered_parms, out_parms)
 
-neurons = cn.create_neurons(entered_parms, out_parms, layer_number, neuron_layer_quantity, [weight_bottom, weight_upper])
+neurons = cn.create_neurons(entered_parms, out_parms, layer_number, neuron_layer_quantity, activ_funcs, activ_funcs_ders, weight_bottom, weight_upper)
+
+
+neurons_1 = c.deepcopy(neurons)
+
+neurons_2 = c.deepcopy(neurons)
 
 
 print("Навчальна вибірка")
@@ -86,112 +109,17 @@ print(tr_set_res)
 print()
 
 
-tr_res, tr_err, epochs = c.learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neurons, neuron_layer_quantity, eta, u, learning_algorithm, weight_bottom, weight_upper)
 
-i = 0
+u = 1
 
-while i < len(tr_res):
+calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons, neuron_layer_quantity, eta, u, 0)
 
-    j = 0
 
-    while j < len(tr_res[i]):
+u = len(tr_set_data)
 
-        tr_res[i][j] = round(tr_res[i][j], 3)
-
-        j += 1
-
-    i += 1
-
-print(f"Отриманий результат: {tr_res}")
-
-print(f"Похибка: {tr_err[-1]}")
-
-print(f"Кількість епох навчання: {epochs}")
-
-print()
+calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons_1, neuron_layer_quantity, eta, u, 1, weight_bottom, weight_upper, activ_funcs, activ_funcs_ders)
 
 
 
-plt.figure(1)
-
-plt.title(f"Навчальна вибірка, похибка {tr_err[-1]}")
-
-i = 0
-
-while i < len(tr_res):
-
-    plt.scatter(tr_set_data[i][0], tr_set_res[i], c = "red")
-
-    plt.scatter(tr_set_data[i][0], tr_res[i], c = "blue")
-
-    i += 1
-
-plt.show()
-
-
-plt.figure(2)
-
-plt.title("Крива навчання мережі")
-
-i = 0
-
-x = []
-
-y = []
-
-while i < len(tr_err):
-
-    x.append(i)
-
-    y.append(tr_err[i])
-
-    # plt.scatter(i, tr_err[i])
-
-    i += 1
-
-plt.plot(x, y)
-
-plt.show()
-
-
-print("Тестова вибірка")
-
-test_res, test_err = c.calculate_test_set(neurons, test_set_data, test_set_res)
-
-i = 0
-
-while i < len(test_res):
-
-    j = 0
-
-    while j < len(test_res[i]):
-
-        test_res[i][j] = round(test_res[i][j], 3)
-
-        j += 1
-
-    i += 1
-
-
-print(f"Отриманий результат: {test_res}")
-
-print(f"Похибка: {test_err}")
-
-print()
-
-
-plt.figure(3)
-
-plt.title(f"Тестова вибірка, похибка {test_err}")
-
-i = 0
-
-while i < len(test_res):
-
-    plt.scatter(test_set_data[i][0], test_set_res[i], c = "red")
-
-    plt.scatter(test_set_data[i][0], test_res[i], c = "blue")
-
-    i += 1
-
-plt.show()
+# подумати про комбінований алгоритм: спочатку знайти локальний оптимум генетичним (можливо, з іншим значенням epochs_threshold). Потім наблизитися до глобального за допомогою зворотного поширення
+# потрібно правильно визначати номери фігур

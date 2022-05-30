@@ -7,6 +7,10 @@ Created on Fri Apr 15 16:14:05 2022
 
 import learning_algorithms as la
 
+import matplotlib.pyplot as plt
+
+
+
 def calculate_layer(curr_layer, next_layer, in_arr, learning_algorithm):
 
         res = []
@@ -21,7 +25,7 @@ def calculate_layer(curr_layer, next_layer, in_arr, learning_algorithm):
 
             while j < len(weight_arr):
 
-                exit_value = weight_arr[j] * in_arr[i] + curr_layer[i].get_bias()
+                exit_value = weight_arr[j] * in_arr[i]
 
                 curr_layer[i].set_exit_value(j, exit_value)
 
@@ -41,7 +45,7 @@ def calculate_layer(curr_layer, next_layer, in_arr, learning_algorithm):
 
             while j < len(res):
 
-                res[j] = next_layer[j].get_activation_function_value(res[j])
+                res[j] = next_layer[j].get_activation_function_value(res[j]+next_layer[j].get_bias())
 
                 j += 1
 
@@ -105,7 +109,7 @@ def calculating_cycle(set_data, set_res, neur_arr, learning_algorithm):
 
         return result, error
 
-def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delta_w, learning_algorithm, w_bottom, w_upper):
+def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, learning_algorithm, *args):
 
     result = []
 
@@ -137,7 +141,7 @@ def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delt
 
         if learning_algorithm == 0:
 
-            delta_w = la.backpropagation(neur_arr, result, eta, err_for_backprop, batch, i, delta_w)
+            delta_w, delta_w_bias = la.backpropagation(neur_arr, result, eta, err_for_backprop, batch, i, args[0], args[1])
 
             for n in neur_arr:
 
@@ -147,7 +151,7 @@ def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delt
 
         if (i+1)%batch == 0 and learning_algorithm == 1:
 
-            neur_arr = la.genetic(neur_arr, neur_layer_arr, len(set_res), set_data, set_res, w_bottom, w_upper)
+            neur_arr = la.genetic(neur_arr, neur_layer_arr, len(set_res), set_data, set_res, args[0], args[1], args[2], args[3])
 
         i += 1
 
@@ -155,18 +159,20 @@ def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delt
 
     if learning_algorithm == 1:
 
-        return neur_arr, result, error, delta_w
+        return neur_arr, result, error
 
-    return result, error, delta_w
+    return result, error, delta_w, delta_w_bias
 
 
-def learning_process(error_threshold, epochs_threshold, set_data, set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm, w_bottom, w_upper):
+def learning_process(error_threshold, epochs_threshold, set_data, set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm, *args):
 
     error = 1
 
     err_arr = []
 
     delta_w = []
+
+    delta_w_bias = []
 
     count = 0
 
@@ -180,19 +186,18 @@ def learning_process(error_threshold, epochs_threshold, set_data, set_res, neur_
 
         delta_w.append(temp_arr)
 
-    del delta_w[-1]
+        delta_w_bias.append(temp_arr)
 
 
     while error > error_threshold and count < epochs_threshold:
 
         if learning_algorithm == 0:
 
-            result, error, delta_w = learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delta_w, learning_algorithm, w_bottom, w_upper)
+            result, error, delta_w, delta_w_bias = learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, learning_algorithm, delta_w, delta_w_bias)
 
         else:
 
-            neur_arr, result, error, delta_w = learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, delta_w, learning_algorithm, w_bottom, w_upper)
-
+            neur_arr, result, error = learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, learning_algorithm, args[0], args[1], args[2], args[3])
 
         err_arr.append(error)
 
@@ -227,3 +232,136 @@ def calculate_test_set(neur_arr, set_data, set_res):
     error /= len(set_res)
 
     return result, error
+
+def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm, *args):
+
+    if learning_algorithm == 0:
+
+        tr_res, tr_err, epochs = learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm)
+
+    else:
+
+        tr_res, tr_err, epochs = learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm, args[0], args[1], args[2], args[3])
+
+    i = 0
+
+    while i < len(tr_res):
+
+        j = 0
+
+        while j < len(tr_res[i]):
+
+            tr_res[i][j] = round(tr_res[i][j], 3)
+
+            j += 1
+
+        i += 1
+
+
+    if learning_algorithm == 0:
+
+        print("Алгоритм зворотного поширення помилки")
+
+    elif learning_algorithm == 1:
+
+        print("Генетичний алгоритм")
+
+
+    print(f"Отриманий результат: {tr_res}")
+
+    print(f"Похибка: {tr_err[-1]}")
+
+    print(f"Кількість епох навчання: {epochs}")
+
+    print()
+
+
+
+    plt.figure(1+learning_algorithm*3)
+
+    plt.title(f"Навчальна вибірка, похибка {tr_err[-1]}")
+
+    i = 0
+
+    while i < len(tr_res):
+
+        plt.scatter(tr_set_data[i][0], tr_set_res[i], c = "red")
+
+        plt.scatter(tr_set_data[i][0], tr_res[i], c = "blue")
+
+        i += 1
+
+    plt.show()
+
+
+    plt.figure(2+learning_algorithm*3)
+
+
+    if learning_algorithm == 0:
+
+        plt.title("Крива навчання мережі зворотним поширенням помилки")
+
+    elif learning_algorithm == 1:
+
+        plt.title("Крива навчання мережі генетичним алгоритмом")
+
+
+
+    i = 0
+
+    x = []
+
+    while i < len(tr_err):
+
+        x.append(i)
+
+        i += 1
+
+
+
+    plt.plot(x, tr_err)
+
+    plt.show()
+
+
+    print("Тестова вибірка")
+
+    test_res, test_err = calculate_test_set(neur_arr, test_set_data, test_set_res)
+
+    i = 0
+
+    while i < len(test_res):
+
+        j = 0
+
+        while j < len(test_res[i]):
+
+            test_res[i][j] = round(test_res[i][j], 3)
+
+            j += 1
+
+        i += 1
+
+
+    print(f"Отриманий результат: {test_res}")
+
+    print(f"Похибка: {test_err}")
+
+    print()
+
+
+    plt.figure(3+learning_algorithm*3)
+
+    plt.title(f"Тестова вибірка, похибка {test_err}")
+
+    i = 0
+
+    while i < len(test_res):
+
+        plt.scatter(test_set_data[i][0], test_set_res[i], c = "red")
+
+        plt.scatter(test_set_data[i][0], test_res[i], c = "blue")
+
+        i += 1
+
+    plt.show()

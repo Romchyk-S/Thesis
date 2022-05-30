@@ -7,8 +7,6 @@ Created on Fri Apr  8 16:49:15 2022
 
 import random as r
 
-import math as m
-
 # import activation_functions as af
 
 class Neuron:
@@ -23,21 +21,25 @@ class Neuron:
 
     S = 0
 
-    activ_func = 0 # подумати, як передавати її. Можливо масив функцій
+    activ_func = 0
 
-    def __init__ (self, num_ind, num_layer):
+    activ_func_der = 0
+
+    def __init__ (self, num_ind, num_layer, func, func_der):
 
         self.index = num_ind
 
         self.layer = num_layer
 
-        # self.bias = round(0 + (r.random() * (1 - 0)), 2)
-
-        self.bias = 0 # не знаю, як оновлювати, тимчасово відключив
+        self.bias = round(-1 + (r.random() * (1 - (-1))), 2)
 
         self.weights = []
 
         self.exit_values = []
+
+        self.activ_func = func
+
+        self.activ_func_der = func_der
 
     def __repr__(self):
 
@@ -149,50 +151,25 @@ class Neuron:
 
         self.activ_func = func
 
-        self.activ_func_der = 0 # Теж подумати
+    def set_activation_function_der(self, func):
 
-    def get_activation_function_value(self, x): # обрати якусь кращу, можливо певним чином комбінувати різні для різних рівнів
+        self.activ_func_der = func
 
-        #Leaky ReLU
+    def get_activation_function(self):
 
-        # if x < 0:
+        return self.activ_func
 
-        #     return 0.01*x
+    def get_activation_function_der(self):
 
-        # else:
+        return self.activ_func_der
 
-        #     return x
+    def get_activation_function_value(self, x):
 
-        return (m.exp(x) - m.exp(-x))/(m.exp(x) + m.exp(-x))
-
-        # return self.activ_func(x)
+        return self.activ_func(x)
 
     def get_activation_function_der_value(self, x):
 
-
-        # if x < 0:
-
-        #     return 0.01
-
-        # else:
-
-        #     return 1
-
-        # return 1 - (round((m.exp(x) - m.exp(-x)), 3)**2/(round((m.exp(x) + m.exp(-x)), 3)**2))
-
-        try:
-
-            return 1 - (((m.exp(x) - m.exp(-x))**2)/((m.exp(x) + m.exp(-x))**2))
-
-        except OverflowError:
-
-            print(self.get_weights())
-
-            print(x)
-
-            print()
-
-        # return self.activ_func_der(x)
+        return self.activ_func_der(x)
 
     def to_zero(self):
 

@@ -17,7 +17,7 @@ def set_errors(neur_arr, err):
 
             if i == len(neur_arr)-1:
 
-                neur_arr[i][j].set_error(err[j]) # можливо множити на f_der(S)
+                neur_arr[i][j].set_error(err[j]*neur_arr[i][j].get_activation_function_der_value(neur_arr[i][j].get_S()))
 
             else:
 
@@ -33,7 +33,7 @@ def set_errors(neur_arr, err):
 
         i -= 1
 
-def update_delta_w(neur_arr, eta, delta_w_arr, iteration, batch):
+def update_delta_w(neur_arr, eta, delta_w_arr, delta_w_bias_arr, iteration, batch):
 
     i = len(neur_arr)-1
 
@@ -53,6 +53,8 @@ def update_delta_w(neur_arr, eta, delta_w_arr, iteration, batch):
 
                     delta_w = eta*delta_w_temp*neur_arr[i-1][k].get_exit_value(j)
 
+                    delta_w_bias = eta*delta_w_temp
+
                     try:
 
                         delta_w_arr[i-1][k] += delta_w
@@ -61,11 +63,23 @@ def update_delta_w(neur_arr, eta, delta_w_arr, iteration, batch):
 
                         delta_w_arr[i-1].insert(k, delta_w)
 
+                    try:
+
+                        delta_w_bias_arr[i-1][k] += delta_w_bias
+
+                    except IndexError:
+
+                        delta_w_bias_arr[i-1].insert(k, delta_w_bias)
+
                     if (iteration+1) % batch == 0:
 
                         neur_arr[i-1][k].update_weight(j, delta_w_arr[i-1][k])
 
+                        neur_arr[i-1][k].update_bias(delta_w_bias_arr[i-1][k])
+
                         delta_w_arr[i-1][k] = 0
+
+                        delta_w_bias_arr[i-1][k] = 0
 
                     k += 1
 
@@ -73,6 +87,6 @@ def update_delta_w(neur_arr, eta, delta_w_arr, iteration, batch):
 
             i -= 1
 
-    return delta_w_arr
+    return delta_w_arr, delta_w_bias_arr
 
 

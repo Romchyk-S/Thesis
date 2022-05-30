@@ -10,13 +10,11 @@ import genetic_algorithm_functions as ga
 import backpropagation_functions as bf
 
 
-def backpropagation(neur_arr, res, eta, err, batch, iteration, delta_w_arr):
-
-    # як оновлювати bias?
+def backpropagation(neur_arr, res, eta, err, batch, iteration, delta_w_arr, delta_w_bias_arr):
 
     bf.set_errors(neur_arr, err)
 
-    delta_w_arr = bf.update_delta_w(neur_arr, eta, delta_w_arr, iteration, batch)
+    delta_w_arr, delta_w_bias_arr = bf.update_delta_w(neur_arr, eta, delta_w_arr, delta_w_bias_arr, iteration, batch)
 
     for n in neur_arr:
 
@@ -24,15 +22,15 @@ def backpropagation(neur_arr, res, eta, err, batch, iteration, delta_w_arr):
 
             m.to_zero()
 
-    return delta_w_arr
+    return delta_w_arr, delta_w_bias_arr
 
-def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper):
+def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper, func_arr, func_der_arr):
 
     population_length = 100
 
     new_population = []
 
-    population_with_err = ga.create_initial_population(population_length, neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper)
+    population_with_err = ga.create_initial_population(population_length, neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper, func_arr, func_der_arr)
 
     normalized_fitness_population = ga.norm_fitness(population_with_err) # формулу всередині потрібно виправити
 
@@ -44,8 +42,6 @@ def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w
         new_population.append(chromosome_1)
 
         new_population.append(chromosome_2)
-
-    # батьки збережуться, якщо не випаде ні мутація, ні схрещування
 
     best_neur_arr = ga.choose_best_network(new_population, neur_arr, set_data, set_res)
 

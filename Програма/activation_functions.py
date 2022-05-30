@@ -16,7 +16,6 @@ alpha_LU = 0.1
 lambda_LU = 0.01
 
 
-
 def Linear(x):
 
     return alpha_lin*x
@@ -92,7 +91,7 @@ def ELU_der(x, *args):
 
     else:
 
-        return a*
+        return a
 
 def SELU(x):
 
