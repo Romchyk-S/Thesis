@@ -152,7 +152,7 @@ def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, lear
 
         if (i+1)%batch == 0 and learning_algorithm == 1:
 
-            neur_arr = la.genetic(neur_arr, neur_layer_arr, len(set_res), set_data, set_res, args[0], args[1], args[2], args[3], args[4], args[5])
+            neur_arr = la.genetic(neur_arr, neur_layer_arr, len(set_res), set_data, set_res, args[0], args[1], args[2], args[3], args[4], args[5], args[6])
 
         i += 1
 
@@ -200,7 +200,7 @@ def learning_process(error_threshold, epochs_threshold, set_data, set_res, neur_
 
         else:
 
-            neur_arr, result, error = learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, learning_algorithm, args[0], args[1], args[2], args[3], args[4], args[5])
+            neur_arr, result, error = learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, learning_algorithm, args[0], args[1], args[2], args[3], args[4], args[5], args[6])
 
         err_arr.append(error)
 
@@ -244,7 +244,7 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
     else:
 
-        neur_arr, tr_err_arr = learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm, args[0], args[1], args[2], args[3], args[4], args[5])
+        neur_arr, tr_err_arr = learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm, args[0], args[1], args[2], args[3], args[4], args[5], args[6])
 
     # print("FINAL")
 
@@ -280,14 +280,15 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
         print("Генетичний алгоритм")
 
+    print()
 
     print("Навчальна вибірка")
 
-    print(tr_set_data)
+    # print(tr_set_data)
 
-    print(tr_set_res)
+    # print(tr_set_res)
 
-    print(f"Отриманий результат: {tr_res}")
+    # print(f"Отриманий результат: {tr_res}")
 
     print(f"Похибка: {tr_err}")
 
@@ -362,11 +363,23 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
         i += 1
 
 
-    print(f"Отриманий результат: {test_res}")
+    # print(f"Отриманий результат: {test_res}")
 
     print(f"Похибка: {test_err}")
 
     print()
+
+    # for n in neur_arr:
+
+    #     for m in n:
+
+    #         print(m.get_weights())
+
+    #         print(m.get_bias())
+
+    #         print()
+
+    #     print()
 
 
     plt.figure(3+learning_algorithm*3)

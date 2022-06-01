@@ -24,9 +24,7 @@ def backpropagation(neur_arr, res, eta, err, batch, iteration, delta_w_arr, delt
 
     return delta_w_arr, delta_w_bias_arr
 
-def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper, func_arr, func_der_arr, crossover_prob, mutation_prob):
-
-    population_length = 100
+def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper, func_arr, func_der_arr, crossover_prob, mutation_prob, population_length):
 
     new_population = []
 

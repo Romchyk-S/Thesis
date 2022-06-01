@@ -46,6 +46,8 @@ crossover_prob = 0.85
 
 mutation_prob = 0.25
 
+population_length = 10
+
 # оновлюються протягом роботи
 
 neurons_created = 0
@@ -80,7 +82,7 @@ calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res
 
 u = len(tr_set_data)
 
-calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons_1, neuron_layer_quantity, eta, u, 1, weight_bottom, weight_upper, activ_funcs, activ_funcs_ders, crossover_prob, mutation_prob)
+calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons_1, neuron_layer_quantity, eta, u, 1, weight_bottom, weight_upper, activ_funcs, activ_funcs_ders, crossover_prob, mutation_prob, population_length)
 
 
 

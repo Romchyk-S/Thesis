@@ -25,13 +25,17 @@ class Neuron:
 
     activ_func_der = 0
 
-    def __init__ (self, num_ind, num_layer, func, func_der, bias_bottom, bias_upper):
+    def __init__ (self, num_ind, num_layer, func, func_der, *args):
 
         self.index = num_ind
 
         self.layer = num_layer
 
-        if self.layer != 0:
+        if self.layer != 0 and len(args) > 0:
+
+            bias_bottom = args[0]
+
+            bias_upper = args[1]
 
             self.bias = round(bias_bottom + (r.random() * (bias_upper - (bias_bottom))), 3)
 

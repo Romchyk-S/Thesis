@@ -9,7 +9,7 @@ Created on Sat Apr 23 15:13:44 2022
 
 import numpy as np
 
-import sklearn as sk
+from sklearn import datasets
 
 import inspect as insp
 
@@ -17,7 +17,7 @@ import activation_functions as af
 
 def get_dataset(in_parms):
 
-    iris = sk.datasets.load_iris()
+    iris = datasets.load_iris()
 
     set_data = iris.data[:, :in_parms]  # we only take the first {in_parms} features.
 

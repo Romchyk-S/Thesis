@@ -216,11 +216,11 @@ def create_new_network(chromosome, neur_arr):
 
             weights_num = len(j.get_weights())
 
-            neuron = nc.Neuron(j.get_index(), j.get_layer(), j.get_activation_function(), j.get_activation_function_der(), -1, 1)
+            neuron = nc.Neuron(j.get_index(), j.get_layer(), j.get_activation_function(), j.get_activation_function_der())
 
             neuron.add_weights_from_arr(chromosome[0:weights_num])
 
-            del chromosome[0:weights_num-1]
+            del chromosome[0:weights_num]
 
             if neuron.get_layer != 0:
 

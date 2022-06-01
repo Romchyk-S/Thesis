@@ -55,11 +55,7 @@ def update_delta_w(neur_arr, eta, delta_w_arr, delta_w_bias_arr, iteration, batc
 
                     delta_w = eta*delta_w_temp*neur_arr[i-1][k].get_exit_value(j)
 
-                    delta_w = delta_w_temp*neur_arr[i-1][k].get_exit_value(j)
-
                     delta_w_bias = eta*delta_w_temp
-
-                    delta_w_bias = delta_w_temp
 
                     try:
 
@@ -79,9 +75,9 @@ def update_delta_w(neur_arr, eta, delta_w_arr, delta_w_bias_arr, iteration, batc
 
                     if (iteration+1) % batch == 0:
 
-                        neur_arr[i-1][k].update_weight(j, round(-delta_w_arr[i-1][k], 3))
+                        neur_arr[i-1][k].update_weight(j, round(delta_w_arr[i-1][k], 3))
 
-                        neur_arr[i-1][k].update_bias(round(-delta_w_bias_arr[i-1][k], 3))
+                        neur_arr[i-1][k].update_bias(round(delta_w_bias_arr[i-1][k], 3))
 
                         delta_w_arr[i-1][k] = 0
 
