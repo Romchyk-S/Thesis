@@ -10,7 +10,6 @@ import learning_algorithms as la
 import matplotlib.pyplot as plt
 
 
-
 def calculate_layer(curr_layer, next_layer, in_arr, learning_algorithm):
 
         res = []
@@ -22,10 +21,6 @@ def calculate_layer(curr_layer, next_layer, in_arr, learning_algorithm):
             j = 0
 
             weight_arr = curr_layer[i].get_weights()
-
-            # print("weights")
-
-            # print(weight_arr)
 
             while j < len(weight_arr):
 
@@ -47,29 +42,9 @@ def calculate_layer(curr_layer, next_layer, in_arr, learning_algorithm):
 
             i += 1
 
-        # print("check")
-
-        # print(curr_layer)
-
-        # print(next_layer)
-
-        # print(res)
-
-        # print()
-
         j = 0
 
         while j < len(res):
-
-            # print("j")
-
-            # print(j)
-
-            # print()
-
-            # print()
-
-            # print(next_layer)
 
             res[j] = next_layer[j].get_activation_function_value(res[j]+next_layer[j].get_bias())
 
@@ -84,6 +59,8 @@ def calculate_result(neur_arr, in_arr, learning_algorithm):
     while i < len(neur_arr)-1:
 
         in_arr = calculate_layer(neur_arr[i], neur_arr[i+1], in_arr, learning_algorithm)
+
+        # in_arr стискати до проміжку [0;2]
 
         i += 1
 
@@ -143,12 +120,6 @@ def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, lear
 
         err_for_backprop = []
 
-        # print(f"set_data {i}")
-
-        # print(set_data[i])
-
-        # print()
-
         if learning_algorithm == 0:
 
             res, error_for_i, err_for_backprop = calculating_cycle(set_data[i], set_res[i], neur_arr, learning_algorithm)
@@ -206,17 +177,19 @@ def learning_process(error_threshold, epochs_threshold, set_data, set_res, neur_
 
     count = 0
 
-    for n in neur_arr:
+    if learning_algorithm == 0:
 
-        temp_arr = []
+        for n in neur_arr:
 
-        for m in n:
+            temp_arr = []
 
-            temp_arr.append(0)
+            for m in n:
 
-        delta_w.append(temp_arr)
+                temp_arr.append(0)
 
-        delta_w_bias.append(temp_arr)
+            delta_w.append(temp_arr)
+
+            delta_w_bias.append(temp_arr)
 
 
     while error > error_threshold and count < epochs_threshold:
@@ -230,8 +203,6 @@ def learning_process(error_threshold, epochs_threshold, set_data, set_res, neur_
             neur_arr, result, error = learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, learning_algorithm, args[0], args[1], args[2], args[3], args[4], args[5])
 
         err_arr.append(error)
-
-        # result, error = calculate_set_res(neur_arr, set_data, set_res)
 
         count += 1
 
@@ -283,6 +254,8 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
     # print()
 
+    tr_err_arr.append(tr_err)
+
 
     i = 0
 
@@ -307,6 +280,12 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
         print("Генетичний алгоритм")
 
+
+    print("Навчальна вибірка")
+
+    print(tr_set_data)
+
+    print(tr_set_res)
 
     print(f"Отриманий результат: {tr_res}")
 

@@ -44,6 +44,18 @@ def ReLU_der(x):
 
     return ReLU(x, x)
 
+def ReLU_x6(x):
+
+    return min(max(0,x), 6)
+
+def Relu_x6_der(x):
+
+    if x < 0 or x > 6:
+
+        return 0
+
+    return 1
+
 def Leaky(x):
 
     if x < 0:
@@ -109,6 +121,8 @@ def SELU_der(x):
 
 def Sigmoid(x):
 
+    # print(x)
+
     return 1/(1+m.exp(-x))
 
 def Sigmoid_der(x):
@@ -125,7 +139,13 @@ def Tanh_der(x):
 
 def Softplus(x):
 
-    return m.log(1+m.exp(x))
+    # try:
+
+        return m.log(1+m.exp(x))
+
+    # except OverflowError:
+
+    #     print(x)
 
 def Softplus_der(x):
 

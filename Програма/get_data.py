@@ -15,46 +15,6 @@ import inspect as insp
 
 import activation_functions as af
 
-# def get_dataset(length, entered_parms):
-
-#     data = []
-
-#     exp_res = []
-
-#     a = 0
-
-#     b = 1
-
-#     # неправильно обчислює, якщо значення не з [0;1].
-#     # Теоретично врятує нормалізація, однак на практиці нормалізують не лише до проміжку [0;1]
-#     # Можливо винна активаційна функція
-
-#     i = 0
-
-#     while i < length:
-
-#         D = []
-
-#         R = []
-
-#         j = 0
-
-#         while j < entered_parms:
-
-#             D.append(round(a + r.random() * (b-a), 3))
-
-#             j += 1
-
-#         R.append(round(a + r.random() * (b-a), 3))
-
-#         data.append(D)
-
-#         exp_res.append(R)
-
-#         i += 1
-
-#     return data, exp_res
-
 def get_dataset(in_parms):
 
     iris = sk.datasets.load_iris()
@@ -76,7 +36,7 @@ def get_dataset(in_parms):
 
 
 
-    upper = 1
+    upper = 2
 
     lower = 0
 
@@ -104,7 +64,6 @@ def get_dataset(in_parms):
     set_data = set_data.T.tolist()
 
 
-
     tr_set_data = set_data[::2]
 
     tr_set_res = set_res[::2]
@@ -112,18 +71,6 @@ def get_dataset(in_parms):
     test_set_data = set_data[1::2]
 
     test_set_res = set_res[1::2]
-
-    # print("Навчальна вибірка")
-
-    # print("Вхід:")
-
-    # print(tr_set_data)
-
-    # print("Вихід:")
-
-    # print(tr_set_res)
-
-    # print()
 
     return tr_set_data, tr_set_res, test_set_data, test_set_res
 

@@ -34,6 +34,8 @@ def get_layer_num(parms_in, parms_out):
 
     print(f"Кількість нейронів на рівнях: {neur_layer_arr}")
 
+    print()
+
     return layer_num, neur_layer_arr
 
 def create_layer(num, quant, layer, func, func_der, bias_bottom, bias_upper):
@@ -91,16 +93,17 @@ def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, func_arr, fun
     # Leaky: 1
     # Linear: 2
     # ReLU: 3
-    # SELU: 4
-    # Sigmoid: 5
-    # Softplus: 6
-    # Tanh: 7
+    # ReLU6: 4
+    # SELU: 5
+    # Sigmoid: 6
+    # Softplus: 7
+    # Tanh: 8
 
-    activ_func_index_in = 2
+    activ_func_index_in = 6
 
-    activ_func_index_hidden = 1
+    activ_func_index_hidden = 6
 
-    activ_func_index_out = 0
+    activ_func_index_out = 2
 
     i = 0
 
