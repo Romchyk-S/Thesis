@@ -25,13 +25,15 @@ class Neuron:
 
     activ_func_der = 0
 
-    def __init__ (self, num_ind, num_layer, func, func_der):
+    def __init__ (self, num_ind, num_layer, func, func_der, bias_bottom, bias_upper):
 
         self.index = num_ind
 
         self.layer = num_layer
 
-        self.bias = round(-1 + (r.random() * (1 - (-1))), 2)
+        if self.layer != 0:
+
+            self.bias = round(bias_bottom + (r.random() * (bias_upper - (bias_bottom))), 3)
 
         self.weights = []
 
@@ -71,7 +73,7 @@ class Neuron:
 
         while i < next_layer_quant:
 
-            self.weights.append(round(w_bottom + (r.random() * (w_upper - (w_bottom))), 2))
+            self.weights.append(round(w_bottom + (r.random() * (w_upper - (w_bottom))), 3))
 
             i += 1
 

@@ -14,7 +14,6 @@ def get_layer_num(parms_in, parms_out):
 
     layer_num = int(input("Введіть кількість прихованих рівнів нейронної мережі: "))
 
-
     if layer_num > 0:
 
         i = 0
@@ -25,27 +24,19 @@ def get_layer_num(parms_in, parms_out):
 
             i += 1
 
-        neur_layer_arr.insert(0, parms_in)
-
-        neur_layer_arr.insert(len(neur_layer_arr), parms_out)
-
-        print()
-
-        print(f"Кількість рівнів: {layer_num+2}")
-
-        print(f"Кількість нейронів на рівнях: {neur_layer_arr}")
-
-    else:
-
-        print(f"Кількість рівнів: {layer_num+2}")
-
-
     print()
 
+    neur_layer_arr.insert(0, parms_in)
+
+    neur_layer_arr.insert(len(neur_layer_arr), parms_out)
+
+    print(f"Кількість рівнів: {layer_num+2}")
+
+    print(f"Кількість нейронів на рівнях: {neur_layer_arr}")
 
     return layer_num, neur_layer_arr
 
-def create_layer(num, quant, layer, func, func_der):
+def create_layer(num, quant, layer, func, func_der, bias_bottom, bias_upper):
 
     i = 0
 
@@ -53,7 +44,7 @@ def create_layer(num, quant, layer, func, func_der):
 
     while i < num:
 
-        arr.append(nc.Neuron(quant+i, layer, func, func_der))
+        arr.append(nc.Neuron(quant+i, layer, func, func_der, bias_bottom, bias_upper))
 
         i += 1
 
@@ -61,9 +52,11 @@ def create_layer(num, quant, layer, func, func_der):
 
 def add_weights(neur_arr, neur_layer_arr, *args):
 
-    for i in neur_arr:
+    i = 0
 
-        for j in i:
+    while i < len(neur_arr)-1:
+
+        for j in neur_arr[i]:
 
             try:
 
@@ -75,9 +68,16 @@ def add_weights(neur_arr, neur_layer_arr, *args):
 
                     j.add_weights_from_arr(args[0][j.get_index()-1])
 
+
             except IndexError:
 
+                print("IndErrS")
+
+                print()
+
                 break
+
+        i += 1
 
 def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, func_arr, func_der_arr, *args):
 
@@ -87,11 +87,20 @@ def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, func_arr, fun
 
     # потрібен ефективніший спосіб
 
-    activ_func_index_in = 5 #sigmoid
+    # ELU: 0
+    # Leaky: 1
+    # Linear: 2
+    # ReLU: 3
+    # SELU: 4
+    # Sigmoid: 5
+    # Softplus: 6
+    # Tanh: 7
 
-    activ_func_index_out = 5 #sigmoid
+    activ_func_index_in = 2
 
-    activ_func_index_hidden = 5 #sigmoid
+    activ_func_index_hidden = 1
+
+    activ_func_index_out = 0
 
     i = 0
 
@@ -99,19 +108,19 @@ def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, func_arr, fun
 
         if i == 0:
 
-            neur_arr.append(create_layer(parms_in, neurons_created+1, i+1, func_arr[activ_func_index_in], func_der_arr[activ_func_index_in]))
+            neur_arr.append(create_layer(parms_in, neurons_created+1, i+1, func_arr[activ_func_index_in], func_der_arr[activ_func_index_in], args[0], args[1]))
 
             neurons_created += parms_in
 
         elif i == layer_num+1:
 
-            neur_arr.append(create_layer(parms_out, neurons_created+1, i+1, func_arr[activ_func_index_out], func_der_arr[activ_func_index_in]))
+            neur_arr.append(create_layer(parms_out, neurons_created+1, i+1, func_arr[activ_func_index_out], func_der_arr[activ_func_index_out], args[0], args[1]))
 
             neurons_created += parms_out
 
         else:
 
-            neur_arr.append(create_layer(neur_layer_arr[i], neurons_created+1, i+1, func_arr[activ_func_index_hidden], func_der_arr[activ_func_index_hidden]))
+            neur_arr.append(create_layer(neur_layer_arr[i], neurons_created+1, i+1, func_arr[activ_func_index_hidden], func_der_arr[activ_func_index_hidden], args[0], args[1]))
 
             neurons_created += neur_layer_arr[i]
 
@@ -126,5 +135,7 @@ def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, func_arr, fun
         else:
 
             add_weights(neur_arr, neur_layer_arr, args[0])
+
+            # так само треба для зміщення
 
     return neur_arr

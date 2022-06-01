@@ -11,7 +11,7 @@ import math as m
 
 alpha_lin = 2
 
-alpha_LU = 0.1
+alpha_LU = 4
 
 lambda_LU = 0.01
 
@@ -107,13 +107,13 @@ def SELU_der(x):
 
     return ELU_der(x, x)
 
-def sigmoid(x):
+def Sigmoid(x):
 
     return 1/(1+m.exp(-x))
 
-def sigmoid_der(x):
+def Sigmoid_der(x):
 
-    return sigmoid(x)*(1-sigmoid(x))
+    return Sigmoid(x)*(1-Sigmoid(x))
 
 def Tanh(x):
 
@@ -123,13 +123,13 @@ def Tanh_der(x):
 
     return 1 - (Tanh(x)**2)
 
-def softplus(x):
+def Softplus(x):
 
     return m.log(1+m.exp(x))
 
-def softplus_der(x):
+def Softplus_der(x):
 
-    return sigmoid(x)
+    return Sigmoid(x)
 
 # def softmax(x):
 

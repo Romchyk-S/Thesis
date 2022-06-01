@@ -5,10 +5,6 @@ Created on Wed Feb 23 09:54:02 2022
 @author: romas
 """
 
-import inspect as insp
-
-import activation_functions as af
-
 import create_network as cn
 
 import get_data as gd
@@ -18,30 +14,7 @@ import calculations as calc
 import copy as c
 
 
-
 print()
-
-
-functions_list = insp.getmembers(af, insp.isfunction)
-
-activ_funcs = []
-
-activ_funcs_ders = []
-
-i = 0
-
-while i < len(functions_list):
-
-    if i%2 == 0:
-
-        activ_funcs.append(functions_list[i][1])
-
-    else:
-
-        activ_funcs_ders.append(functions_list[i][1])
-
-    i += 1
-
 
 
 # Notice that because deltas are accumulated over all training items, the order in which training data
@@ -51,44 +24,46 @@ while i < len(functions_list):
 
 # неоновлювані протягом роботи параметри
 
-set_length = 200
-
-eta = 0.005
-
-entered_parms = 5
+in_parms = 2
 
 out_parms = 1
 
 error_threshold = 0.01
 
-epochs_threshold = 150
+epochs_threshold = 100
 
 weight_bottom = -1
 
 weight_upper = 1
 
+# для зворотного поширення помилки
+
+eta = 0.005
+
+# для генетичного алгоритму
+
+crossover_prob = 0.85
+
+mutation_prob = 0.35
+
+# оновлюються протягом роботи
 
 neurons_created = 0
 
 neurons = []
 
 
-set_data, set_res = gd.get_dataset(set_length, entered_parms)
 
-tr_set_data = set_data[::2]
-
-tr_set_res = set_res[::2]
-
-test_set_data = set_data[1::2]
-
-test_set_res = set_res[1::2]
+activ_funcs, activ_funcs_ders = gd.get_activation_funcs()
 
 
-# є проблеми, якщо відсутні проміжні рівні
+tr_set_data, tr_set_res, test_set_data, test_set_res = gd.get_dataset(in_parms)
 
-layer_number, neuron_layer_quantity = cn.get_layer_num(entered_parms, out_parms)
 
-neurons = cn.create_neurons(entered_parms, out_parms, layer_number, neuron_layer_quantity, activ_funcs, activ_funcs_ders, weight_bottom, weight_upper)
+layer_number, neuron_layer_quantity = cn.get_layer_num(in_parms, out_parms)
+
+
+neurons = cn.create_neurons(in_parms, out_parms, layer_number, neuron_layer_quantity, activ_funcs, activ_funcs_ders, weight_bottom, weight_upper)
 
 
 neurons_1 = c.deepcopy(neurons)
@@ -96,29 +71,18 @@ neurons_1 = c.deepcopy(neurons)
 neurons_2 = c.deepcopy(neurons)
 
 
-print("Навчальна вибірка")
 
-print("Вхід:")
+# розібратися з nan, коли багато лінійних функцій
+# мабуть, необхідно буде проводити нормалізацію на кожному рівні
 
-print(tr_set_data)
+# u = 1
 
-print("Вихід:")
-
-print(tr_set_res)
-
-print()
-
-
-
-u = 1
-
-calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons, neuron_layer_quantity, eta, u, 0)
+# calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons, neuron_layer_quantity, eta, u, 0)
 
 
 u = len(tr_set_data)
 
-calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons_1, neuron_layer_quantity, eta, u, 1, weight_bottom, weight_upper, activ_funcs, activ_funcs_ders)
-
+calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons_1, neuron_layer_quantity, eta, u, 1, weight_bottom, weight_upper, activ_funcs, activ_funcs_ders, crossover_prob, mutation_prob)
 
 
 # подумати про комбінований алгоритм: спочатку знайти локальний оптимум генетичним (можливо, з іншим значенням epochs_threshold). Потім наблизитися до глобального за допомогою зворотного поширення

@@ -184,25 +184,19 @@ def mutation(chromosome, w_bottom, w_upper):
 
     return chromosome
 
-def offsprings_creation(normalized_fitness_population, w_bottom, w_upper):
+def offsprings_creation(normalized_fitness_population, w_bottom, w_upper, crossover_prob, mutation_prob):
 
     chromosome_1, chromosome_2 = parent_selection(normalized_fitness_population)
 
-    crossover_prob = 0 + r.random() * (1-0)
-
-    if crossover_prob > 0.1:
+    if 0 + r.random() * (1-0) < crossover_prob:
 
         chromosome_1, chromosome_2 = crossover(chromosome_1, chromosome_2)
 
-    mutation_prob = 0 + r.random() * (1-0)
-
-    if mutation_prob > 0.5:
+    if 0 + r.random() * (1-0) < mutation_prob:
 
         chromosome_1 = mutation(chromosome_1, w_bottom, w_upper)
 
-    mutation_prob = 0 + r.random() * (1-0)
-
-    if mutation_prob > 0.5:
+    if 0 + r.random() * (1-0) < mutation_prob:
 
         chromosome_2 = mutation(chromosome_2, w_bottom, w_upper)
 
@@ -222,13 +216,15 @@ def create_new_network(chromosome, neur_arr):
 
             weights_num = len(j.get_weights())
 
-            neuron = nc.Neuron(j.get_index(), j.get_layer(), j.get_activation_function(), j.get_activation_function_der())
+            neuron = nc.Neuron(j.get_index(), j.get_layer(), j.get_activation_function(), j.get_activation_function_der(), -1, 1)
 
             neuron.add_weights_from_arr(chromosome[0:weights_num])
 
             del chromosome[0:weights_num-1]
 
-            neuron.set_bias(chromosome[0])
+            if neuron.get_layer != 0:
+
+                neuron.set_bias(chromosome[0])
 
             del chromosome[0]
 
