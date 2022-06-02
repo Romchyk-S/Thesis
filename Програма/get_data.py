@@ -15,6 +15,64 @@ import inspect as insp
 
 import activation_functions as af
 
+import math as m
+
+def get_data(file_name):
+
+    f = open(f"{file_name}.txt")
+
+    R = []
+
+    Y = []
+
+    A = []
+
+    delta_K = []
+
+    growth = []
+
+    for row in f:
+
+        new_row = row.strip().split(" ")
+
+        i = 0
+
+        while i < len(new_row):
+
+          new_row[i] = float(new_row[i])
+
+          if i == 0:
+
+              R.append(new_row[i])
+
+          elif i == 1:
+
+              delta_K.append(new_row[i])
+
+              A.append([1, m.log(new_row[i])])
+
+          elif i == 2:
+
+              growth.append(new_row[i])
+
+              Y.append(m.log(new_row[i]))
+
+          i += 1
+
+    A = np.matrix(A)
+
+    Y = np.matrix(Y)
+
+    beta = ((A.T*A)**-1*A.T)*Y.T
+
+    beta = beta.tolist()
+
+    beta[0][0] = m.exp(beta[0][0])
+
+    f.close()
+
+    return R[0], beta[0], beta[1], delta_K, growth
+
 def get_dataset(in_parms):
 
     iris = datasets.load_iris()
