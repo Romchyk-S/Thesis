@@ -24,11 +24,7 @@ print()
 
 # неоновлювані протягом роботи параметри
 
-in_parms = 2
-
-out_parms = 1
-
-error_threshold = 0.0001
+error_threshold = 0.01
 
 epochs_threshold = 200
 
@@ -114,12 +110,6 @@ neurons = []
 
 # set_res_m.append(m)
 
-set_data, set_res = gd.get_dataset("data")
-
-set_data = gd.normalise(set_data)
-
-set_res = gd.normalise(set_res)
-
 # print(set_res)
 
 # print(set_res_C)
@@ -130,6 +120,26 @@ set_res = gd.normalise(set_res)
 
 # print()
 
+# для кожного R визначити C та m
+
+
+# іриси
+
+# tr_set_data, tr_set_res, test_set_data, test_set_res = gd.get_dataset(in_parms)
+
+
+set_data, set_res = gd.get_dataset("data")
+
+set_data = gd.normalise(set_data)
+
+set_res = gd.normalise(set_res)
+
+
+in_parms = len(set_data[0])
+
+out_parms = len(set_res[0])
+
+
 tr_set_data = set_data[::2]
 
 tr_set_res = set_res[::2]
@@ -138,13 +148,7 @@ test_set_data = set_data[1::2]
 
 test_set_res = set_res[1::2]
 
-# для кожного R визначити C та m
-
-
 activ_funcs, activ_funcs_ders = gd.get_activation_funcs()
-
-
-# tr_set_data, tr_set_res, test_set_data, test_set_res = gd.get_dataset(in_parms)
 
 
 layer_number, neuron_layer_quantity = cn.get_layer_num(in_parms, out_parms)
@@ -153,15 +157,19 @@ neurons = cn.create_neurons(in_parms, out_parms, layer_number, neuron_layer_quan
 
 neurons_1 = c.deepcopy(neurons)
 
-neurons_2 = c.deepcopy(neurons)
+
+# для потенційного комбінованого алгоритму
+# neurons_2 = c.deepcopy(neurons)
 
 
-# мабуть, необхідно буде проводити нормалізацію на кожному рівні
+# зворотне поширення помилки
 
 u = 1
 
 calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons, neuron_layer_quantity, eta, u, 0)
 
+
+# генетичний
 
 u = len(tr_set_data)
 
