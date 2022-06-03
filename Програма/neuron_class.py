@@ -37,7 +37,7 @@ class Neuron:
 
             bias_upper = args[1]
 
-            self.bias = round(bias_bottom + (r.random() * (bias_upper - (bias_bottom))), 3)
+            self.bias = round(bias_bottom + (r.random() * (bias_upper - (bias_bottom))), 6)
 
         self.weights = []
 
@@ -77,7 +77,7 @@ class Neuron:
 
         while i < next_layer_quant:
 
-            self.weights.append(round(w_bottom + (r.random() * (w_upper - (w_bottom))), 3))
+            self.weights.append(round(w_bottom + (r.random() * (w_upper - (w_bottom))), 6))
 
             i += 1
 

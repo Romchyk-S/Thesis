@@ -178,7 +178,7 @@ def mutation(chromosome, w_bottom, w_upper):
 
     for i in ind_arr:
 
-        chromosome[i] = round(w_bottom + (r.random() * (w_upper - (w_bottom))), 2)
+        chromosome[i] = round(w_bottom + (r.random() * (w_upper - (w_bottom))), 6)
 
     chromosome = tuple(chromosome)
 

@@ -73,64 +73,134 @@ def get_data(file_name):
 
     return R[0], beta[0], beta[1], delta_K, growth
 
-def get_dataset(in_parms):
+def get_dataset(file_name):
 
-    iris = datasets.load_iris()
+    f = open(f"{file_name}.txt")
 
-    set_data = iris.data[:, :in_parms]  # we only take the first {in_parms} features.
+    data = []
 
-    set_res_temp = iris.target
+    res = []
 
-    set_res = []
+    for row in f:
 
+        new_row = row.strip().split(" ")
 
-    i = 0
+        i = 0
 
-    while i < len(set_res_temp):
+        while i < len(new_row):
 
-        set_res.append([set_res_temp[i]])
+            new_row[i] = float(new_row[i])
 
-        i += 1
+            if i == 0:
 
+                temp_arr = []
 
+                temp_arr.append(new_row[i])
 
-    upper = 2
+            elif i == 1:
 
-    lower = 0
+                temp_arr.append(new_row[i])
 
-    set_data = np.matrix(set_data).T
+            elif i == 2:
 
-    i = 0
+                res.append([new_row[i]])
 
-    while i < len(set_data):
+            i += 1
 
-        max_value = np.amax(set_data[i])
+        data.append(temp_arr)
 
-        min_value = np.amin(set_data[i])
-
-        j = 0
-
-        while j < set_data[i].size:
-
-            set_data[i, j] = round(((set_data[i, j] - min_value)/(max_value-min_value)) * (upper-lower) + lower, 3)
-
-            j += 1
-
-        i += 1
+    return data, res
 
 
-    set_data = set_data.T.tolist()
+def normalise(set_list):
+
+        upper = 1
+
+        lower = 0
+
+        set_list = np.matrix(set_list).T
+
+        i = 0
+
+        while i < len(set_list):
+
+            max_value = np.amax(set_list[i])
+
+            min_value = np.amin(set_list[i])
+
+            j = 0
+
+            while j < set_list[i].size:
+
+                set_list[i, j] = round(((set_list[i, j] - min_value)/(max_value-min_value)) * (upper-lower) + lower, 6)
+
+                j += 1
+
+            i += 1
+
+        set_list = set_list.T.tolist()
+
+        return set_list
 
 
-    tr_set_data = set_data[::2]
+# def get_dataset(in_parms):
 
-    tr_set_res = set_res[::2]
+#     iris = datasets.load_iris()
 
-    test_set_data = set_data[1::2]
+#     set_data = iris.data[:, :in_parms]  # we only take the first {in_parms} features.
 
-    test_set_res = set_res[1::2]
+#     set_res_temp = iris.target
 
-    return tr_set_data, tr_set_res, test_set_data, test_set_res
+#     set_res = []
+
+
+#     i = 0
+
+#     while i < len(set_res_temp):
+
+#         set_res.append([set_res_temp[i]])
+
+#         i += 1
+
+
+
+#     upper = 2
+
+#     lower = 0
+
+#     set_data = np.matrix(set_data).T
+
+#     i = 0
+
+#     while i < len(set_data):
+
+#         max_value = np.amax(set_data[i])
+
+#         min_value = np.amin(set_data[i])
+
+#         j = 0
+
+#         while j < set_data[i].size:
+
+#             set_data[i, j] = round(((set_data[i, j] - min_value)/(max_value-min_value)) * (upper-lower) + lower, 3)
+
+#             j += 1
+
+#         i += 1
+
+
+#     set_data = set_data.T.tolist()
+
+
+#     tr_set_data = set_data[::2]
+
+#     tr_set_res = set_res[::2]
+
+#     test_set_data = set_data[1::2]
+
+#     test_set_res = set_res[1::2]
+
+#     return tr_set_data, tr_set_res, test_set_data, test_set_res
 
 def get_activation_funcs():
 

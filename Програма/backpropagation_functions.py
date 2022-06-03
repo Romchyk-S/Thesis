@@ -75,9 +75,9 @@ def update_delta_w(neur_arr, eta, delta_w_arr, delta_w_bias_arr, iteration, batc
 
                     if (iteration+1) % batch == 0:
 
-                        neur_arr[i-1][k].update_weight(j, round(delta_w_arr[i-1][k], 3))
+                        neur_arr[i-1][k].update_weight(j, round(delta_w_arr[i-1][k], 6))
 
-                        neur_arr[i-1][k].update_bias(round(delta_w_bias_arr[i-1][k], 3))
+                        neur_arr[i-1][k].update_bias(round(delta_w_bias_arr[i-1][k], 6))
 
                         delta_w_arr[i-1][k] = 0
 

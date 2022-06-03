@@ -128,7 +128,7 @@ def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, lear
 
             res, error_for_i = calculating_cycle(set_data[i], set_res[i], neur_arr, learning_algorithm)
 
-        error_for_i = round(error_for_i, 3)
+        error_for_i = round(error_for_i, 6)
 
         result.append(res)
 
@@ -218,7 +218,7 @@ def calculate_set_res(neur_arr, set_data, set_res):
 
         res, error_for_i = calculating_cycle(set_data[i], set_res[i], neur_arr, 1)
 
-        error_for_i = round(error_for_i, 3)
+        error_for_i = round(error_for_i, 6)
 
         result.append(res)
 
@@ -265,7 +265,7 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
         while j < len(tr_res[i]):
 
-            tr_res[i][j] = round(tr_res[i][j], 3)
+            tr_res[i][j] = round(tr_res[i][j], 6)
 
             j += 1
 
@@ -356,7 +356,7 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
         while j < len(test_res[i]):
 
-            test_res[i][j] = round(test_res[i][j], 3)
+            test_res[i][j] = round(test_res[i][j], 6)
 
             j += 1
 
