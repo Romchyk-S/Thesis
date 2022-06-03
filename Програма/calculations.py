@@ -156,7 +156,9 @@ def learning_cycle(neur_arr, neur_layer_arr, set_data, set_res, eta, batch, lear
 
         i += 1
 
-    error /= len(set_res)
+    # error /= len(set_res)
+
+    error /= 2
 
     if learning_algorithm == 1:
 
@@ -206,7 +208,9 @@ def learning_process(error_threshold, epochs_threshold, set_data, set_res, neur_
 
         count += 1
 
-    return neur_arr, err_arr
+    return result, neur_arr, err_arr
+
+    # return neur_arr, err_arr
 
 def calculate_set_res(neur_arr, set_data, set_res):
 
@@ -232,7 +236,9 @@ def calculate_set_res(neur_arr, set_data, set_res):
 
         i += 1
 
-    error /= len(set_res)
+    # error /= len(set_res)
+
+    error /= 2
 
     return result, error
 
@@ -240,19 +246,32 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
     if learning_algorithm == 0:
 
-        neur_arr, tr_err_arr = learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm)
+        tr_res, neur_arr, tr_err_arr = learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm)
 
     else:
 
-        neur_arr, tr_err_arr = learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm, args[0], args[1], args[2], args[3], args[4], args[5], args[6])
+        tr_res, neur_arr, tr_err_arr = learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm, args[0], args[1], args[2], args[3], args[4], args[5], args[6])
 
-    # print("FINAL")
+
+    tr_err = tr_err_arr[-1]
+
+
+    print("FINAL")
+
+
+    print(tr_res)
+
+    print(tr_err)
+
+    print()
 
     tr_res, tr_err = calculate_set_res(neur_arr, tr_set_data, tr_set_res)
 
-    # print(tr_res)
+    print(tr_res)
 
-    # print()
+    print(tr_err)
+
+    print()
 
     tr_err_arr.append(tr_err)
 
@@ -297,6 +316,19 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
     print()
 
 
+    # for n in neur_arr:
+
+    #     for m in n:
+
+    #         print(m.get_weights())
+
+    #         print(m.get_bias())
+
+    #         print()
+
+    #     print()
+
+
 
     plt.figure(1+learning_algorithm*3)
 
@@ -306,11 +338,13 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
     while i < len(tr_res):
 
-        plt.scatter(tr_set_data[i][0], tr_set_res[i], c = "red")
+        plt.scatter(tr_set_data[i][1], tr_set_res[i], c = "red")
 
-        plt.scatter(tr_set_data[i][0], tr_res[i], c = "blue")
+        plt.scatter(tr_set_data[i][1], tr_res[i], c = "blue")
 
         i += 1
+
+    plt.legend(["Очікуваний результат" , "Отриманий результат"], loc = "upper right")
 
     plt.show()
 
@@ -363,6 +397,13 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
         i += 1
 
 
+
+    print(test_res)
+
+    print(test_err)
+
+    print()
+
     # print(f"Отриманий результат: {test_res}")
 
     print(f"Похибка: {test_err}")
@@ -390,10 +431,12 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
     while i < len(test_res):
 
-        plt.scatter(test_set_data[i][0], test_set_res[i], c = "red")
+        plt.scatter(test_set_data[i][1], test_set_res[i], c = "red")
 
-        plt.scatter(test_set_data[i][0], test_res[i], c = "blue")
+        plt.scatter(test_set_data[i][1], test_res[i], c = "blue")
 
         i += 1
+
+    plt.legend(["Очікуваний результат" , "Отриманий результат"], loc = "upper right")
 
     plt.show()

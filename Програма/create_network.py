@@ -101,9 +101,9 @@ def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, func_arr, fun
 
     activ_func_index_in = 0
 
-    activ_func_index_hidden = 6
+    activ_func_index_hidden = 8
 
-    activ_func_index_out = 0
+    activ_func_index_out = 0 # точно якась із LU
 
     i = 0
 

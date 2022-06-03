@@ -11,9 +11,9 @@ import math as m
 
 alpha_lin = 2
 
-alpha_LU = 4
+alpha_LU = 0.5
 
-lambda_LU = 0.01
+lambda_LU = 0.1
 
 
 def Linear(x):
