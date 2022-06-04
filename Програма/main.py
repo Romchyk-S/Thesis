@@ -80,17 +80,6 @@ neurons = cn.create_neurons(in_parms, out_parms, layer_number, neuron_layer_quan
 
 neurons_1 = c.deepcopy(neurons)
 
-# for n in neurons_1:
-
-#     for m in n:
-
-#         print(m.get_weights())
-
-#         print(m.get_bias())
-
-# print()
-
-
 # для потенційного комбінованого алгоритму
 # neurons_2 = c.deepcopy(neurons)
 
@@ -103,14 +92,6 @@ calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res
 
 
 # генетичний
-
-# for n in neurons_1:
-
-#     for m in n:
-
-#         print(m.get_weights())
-
-#         print(m.get_bias())
 
 u = len(tr_set_data)
 

@@ -11,7 +11,7 @@ import math as m
 
 alpha_lin = 2
 
-alpha_LU = 0.2
+alpha_LU = 0.5
 
 lambda_LU = 0.1
 
