@@ -247,6 +247,13 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
     in_parm_for_graph = 1
 
 
+    if learning_algorithm == 0:
+
+        print("Алгоритм зворотного поширення помилки")
+
+    elif learning_algorithm == 1:
+
+        print("Генетичний алгоритм")
 
 
     # for n in neur_arr:
@@ -309,14 +316,6 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
         i += 1
 
-
-    if learning_algorithm == 0:
-
-        print("Алгоритм зворотного поширення помилки")
-
-    elif learning_algorithm == 1:
-
-        print("Генетичний алгоритм")
 
     print()
 

@@ -44,6 +44,10 @@ mutation_prob = 0.45
 
 population_length = 10
 
+ga_weight_bottom = -1
+
+ga_weight_upper = 1
+
 # оновлюються протягом роботи
 
 neurons_created = 0
@@ -95,7 +99,7 @@ calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res
 
 u = len(tr_set_data)
 
-calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons_1, neuron_layer_quantity, eta, u, 1, weight_bottom, weight_upper, activ_funcs, activ_funcs_ders, crossover_prob, mutation_prob, population_length)
+calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons_1, neuron_layer_quantity, eta, u, 1, ga_weight_bottom, ga_weight_upper, activ_funcs, activ_funcs_ders, crossover_prob, mutation_prob, population_length)
 
 
 # подумати про комбінований алгоритм: спочатку знайти локальний оптимум генетичним (можливо, з іншим значенням epochs_threshold). Потім наблизитися до глобального за допомогою зворотного поширення
