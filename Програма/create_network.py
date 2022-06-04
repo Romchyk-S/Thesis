@@ -20,7 +20,7 @@ def get_layer_num(parms_in, parms_out):
 
         while i < layer_num:
 
-            neur_layer_arr.append(int(input(f"Введіть кількість нейронів на прихованому рівні {i}: ")))
+            neur_layer_arr.append(int(input(f"Введіть кількість нейронів на прихованому рівні {i+1}: ")))
 
             i += 1
 

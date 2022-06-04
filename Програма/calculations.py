@@ -244,6 +244,25 @@ def calculate_set_res(neur_arr, set_data, set_res):
 
 def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm, *args):
 
+    in_parm_for_graph = 1
+
+
+
+
+    # for n in neur_arr:
+
+    #     for m in n:
+
+    #         print(m.get_weights())
+
+    #         print(m.get_bias())
+
+    #         print()
+
+    #     print()
+
+
+
     if learning_algorithm == 0:
 
         tr_res, neur_arr, tr_err_arr = learning_process(error_threshold, epochs_threshold, tr_set_data, tr_set_res, neur_arr, neur_layer_arr, eta, batch, learning_algorithm)
@@ -256,22 +275,22 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
     tr_err = tr_err_arr[-1]
 
 
-    print("FINAL")
+    # print("FINAL")
 
 
-    print(tr_res)
+    # print(tr_res)
 
-    print(tr_err)
+    # print(tr_err)
 
-    print()
+    # print()
 
     tr_res, tr_err = calculate_set_res(neur_arr, tr_set_data, tr_set_res)
 
-    print(tr_res)
+    # print(tr_res)
 
-    print(tr_err)
+    # print(tr_err)
 
-    print()
+    # print()
 
     tr_err_arr.append(tr_err)
 
@@ -338,9 +357,9 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
     while i < len(tr_res):
 
-        plt.scatter(tr_set_data[i][1], tr_set_res[i], c = "red")
+        plt.scatter(tr_set_data[i][in_parm_for_graph], tr_set_res[i], c = "red")
 
-        plt.scatter(tr_set_data[i][1], tr_res[i], c = "blue")
+        plt.scatter(tr_set_data[i][in_parm_for_graph], tr_res[i], c = "blue")
 
         i += 1
 
@@ -398,11 +417,11 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
 
 
-    print(test_res)
+    # print(test_res)
 
-    print(test_err)
+    # print(test_err)
 
-    print()
+    # print()
 
     # print(f"Отриманий результат: {test_res}")
 
@@ -431,9 +450,9 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
     while i < len(test_res):
 
-        plt.scatter(test_set_data[i][1], test_set_res[i], c = "red")
+        plt.scatter(test_set_data[i][in_parm_for_graph], test_set_res[i], c = "red")
 
-        plt.scatter(test_set_data[i][1], test_res[i], c = "blue")
+        plt.scatter(test_set_data[i][in_parm_for_graph], test_res[i], c = "blue")
 
         i += 1
 

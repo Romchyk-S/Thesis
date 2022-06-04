@@ -38,9 +38,9 @@ eta = 0.005
 
 # для генетичного алгоритму
 
-crossover_prob = 0.55
+crossover_prob = 0.75
 
-mutation_prob = 0.25
+mutation_prob = 0.45
 
 population_length = 10
 
@@ -49,83 +49,6 @@ population_length = 10
 neurons_created = 0
 
 neurons = []
-
-
-# set_data = []
-
-# set_res_C = []
-
-# set_res_m = []
-
-# R, C, m, delta_K, crack_growth = gd.get_data("data")
-
-# set_data.append(R)
-
-# set_res_C.append(C)
-
-# set_res_m.append(m)
-
-# дві мережі: одна знаходить C, інша -- m. Один тренувальний приклад??
-# далі згодувати в закон Періса (написати функцію), разом із delta_K
-# порівняти результат цього обчислення з crack_growth на графіках
-
-
-# R, C, m = gd.get_data("dataR-0.5")
-
-# set_data.append(R)
-
-# set_res_C.append(C)
-
-# set_res_m.append(m)
-
-# R, C, m = gd.get_data("dataR0")
-
-# set_data.append(R)
-
-# set_res_C.append(C)
-
-# set_res_m.append(m)
-
-# R, C, m = gd.get_data("dataR0.1")
-
-# set_data.append(R)
-
-# set_res_C.append(C)
-
-# set_res_m.append(m)
-
-# R, C, m = gd.get_data("dataR0.3")
-
-# set_data.append(R)
-
-# set_res_C.append(C)
-
-# set_res_m.append(m)
-
-# R, C, m = gd.get_data("dataR0.5")
-
-# set_data.append(R)
-
-# set_res_C.append(C)
-
-# set_res_m.append(m)
-
-# print(set_res)
-
-# print(set_res_C)
-
-# print()
-
-# print(set_res_m)
-
-# print()
-
-# для кожного R визначити C та m
-
-
-# іриси
-
-# tr_set_data, tr_set_res, test_set_data, test_set_res = gd.get_dataset(in_parms)
 
 
 set_data, set_res = gd.get_dataset("data")
@@ -157,6 +80,16 @@ neurons = cn.create_neurons(in_parms, out_parms, layer_number, neuron_layer_quan
 
 neurons_1 = c.deepcopy(neurons)
 
+# for n in neurons_1:
+
+#     for m in n:
+
+#         print(m.get_weights())
+
+#         print(m.get_bias())
+
+# print()
+
 
 # для потенційного комбінованого алгоритму
 # neurons_2 = c.deepcopy(neurons)
@@ -170,6 +103,14 @@ calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res
 
 
 # генетичний
+
+# for n in neurons_1:
+
+#     for m in n:
+
+#         print(m.get_weights())
+
+#         print(m.get_bias())
 
 u = len(tr_set_data)
 
