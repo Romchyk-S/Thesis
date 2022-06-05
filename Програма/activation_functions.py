@@ -11,9 +11,13 @@ import math as m
 
 alpha_lin = 2
 
-alpha_LU = 0.5
+alpha_ReLU = 0.1
 
-lambda_LU = 0.1
+alpha_ELU = 0.2
+
+alpha_SELU = 1.2
+
+lambda_SELU = 0.1
 
 
 def Linear(x):
@@ -60,7 +64,7 @@ def Leaky(x):
 
     if x < 0:
 
-        return alpha_LU*x
+        return alpha_ReLU*x
 
     else:
 
@@ -70,7 +74,7 @@ def Leaky_der(x):
 
     if x < 0:
 
-        return alpha_LU
+        return alpha_ReLU
 
     else:
 
@@ -80,7 +84,7 @@ def ELU(x):
 
     if x < 0:
 
-        return alpha_LU*(m.exp(x)-1)
+        return alpha_ELU*(m.exp(x)-1)
 
     else:
 
@@ -94,12 +98,12 @@ def ELU_der(x, *args):
 
     else:
 
-        a = lambda_LU
+        a = lambda_SELU
 
 
     if x < 0:
 
-        return a*alpha_LU*m.exp(x)
+        return a*alpha_ReLU*m.exp(x)
 
     else:
 
@@ -109,11 +113,11 @@ def SELU(x):
 
     if x < 0:
 
-        return lambda_LU * (alpha_LU*m.exp(x) - alpha_LU)
+        return lambda_SELU * (alpha_SELU*m.exp(x) - alpha_SELU)
 
     else:
 
-        return lambda_LU * x
+        return lambda_SELU * x
 
 def SELU_der(x):
 

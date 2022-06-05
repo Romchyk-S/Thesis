@@ -15,6 +15,8 @@ import random as r
 
 import numpy as np
 
+import math as m
+
 
 def make_chromosome(neur_arr):
 
@@ -26,9 +28,9 @@ def make_chromosome(neur_arr):
 
             k = j.get_weights()
 
-            for m in k:
+            for l in k:
 
-                chromosome += (m, )
+                chromosome += (l, )
 
             chromosome += (j.get_bias(), )
 
@@ -78,20 +80,36 @@ def norm_fitness(population):
 
     fit_arr = list(population.values())
 
+    # print(fit_arr)
+
     chromosome_arr = list(population.keys())
 
-    min_fit = min(fit_arr)
-
     new_dict = {}
+
+    exp_sum = 0
 
 
     i = 0
 
     while i < len(fit_arr):
 
-        new_dict[chromosome_arr[i]] = min_fit/fit_arr[i] # подумати над формулою, аби мінімальне значення не мало ймовірності 1
+        exp_sum += m.exp(fit_arr[i])
 
         i += 1
+
+    i = 0
+
+    while i < len(fit_arr):
+
+        new_dict[chromosome_arr[i]] = m.exp(fit_arr[i])/exp_sum
+
+        i += 1
+
+    # print(new_dict.values())
+
+    # print(sum(new_dict.values()))
+
+    # print()
 
     return new_dict
 

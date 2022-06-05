@@ -24,6 +24,8 @@ print()
 
 # неоновлювані протягом роботи параметри
 
+print("Поки найкраще працює мережа 2-2-1-1 з Linear-Tanh-ELU")
+
 error_threshold = 0.01
 
 epochs_threshold = 200
@@ -40,9 +42,9 @@ eta = 0.005
 
 crossover_prob = 0.75
 
-mutation_prob = 0.45
+mutation_prob = 0.25
 
-population_length = 10
+population_length = 100
 
 ga_weight_bottom = -1
 
@@ -93,7 +95,6 @@ neurons_1 = c.deepcopy(neurons)
 u = 1
 
 calc.main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res, test_set_data, test_set_res, neurons, neuron_layer_quantity, eta, u, 0)
-
 
 # генетичний
 
