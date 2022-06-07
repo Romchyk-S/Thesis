@@ -24,7 +24,7 @@ print()
 
 # неоновлювані протягом роботи параметри
 
-print("Поки найкраще працює мережа 2-2-1-1 з Linear-Tanh-ELU")
+print("Поки найкраще працює мережа 2-2-1-1 з ELU-Tanh-ELU")
 
 error_threshold = 0.01
 
@@ -62,6 +62,8 @@ set_data, set_res = gd.get_dataset("data")
 set_data = gd.normalise(set_data)
 
 set_res = gd.normalise(set_res)
+
+set_data_set_res = gd.this_is_evil(set_data, set_res)
 
 
 in_parms = len(set_data[0])

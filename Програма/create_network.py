@@ -99,7 +99,7 @@ def create_neurons(parms_in, parms_out, layer_num, neur_layer_arr, func_arr, fun
     # Softplus: 7
     # Tanh: 8
 
-    activ_func_index_in = 2
+    activ_func_index_in = 0
 
     activ_func_index_hidden = 8
 

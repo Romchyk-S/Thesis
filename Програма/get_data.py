@@ -82,6 +82,29 @@ def normalise(set_list):
         return set_list
 
 
+def this_is_evil(set_list_1, set_list_2):
+
+    i = 0
+
+    while i < len(set_list_2):
+
+        j = 0
+
+        while j < len(set_list_2[i]):
+
+            if set_list_2[i][j] >= 0.14:
+
+                del set_list_1[i]
+
+                del set_list_2[i]
+
+                i -= 1
+
+            j += 1
+
+        i += 1
+
+
 def get_activation_funcs():
 
     functions_list = insp.getmembers(af, insp.isfunction)
