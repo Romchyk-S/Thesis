@@ -17,8 +17,6 @@ def set_errors(neur_arr, err):
 
             if i == len(neur_arr)-1:
 
-                # neur_arr[i][j].set_error(err[j])
-
                 neur_arr[i][j].set_error(err[j]*neur_arr[i][j].get_activation_function_der_value(neur_arr[i][j].get_S()))
 
             else:

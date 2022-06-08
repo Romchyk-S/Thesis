@@ -7,8 +7,6 @@ Created on Fri Apr  8 16:49:15 2022
 
 import random as r
 
-# import activation_functions as af
-
 class Neuron:
 
     index = 0

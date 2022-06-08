@@ -8,7 +8,6 @@ Created on Tue May  3 13:04:24 2022
 import math as m
 
 
-
 alpha_lin = 2
 
 alpha_ReLU = 0.1
@@ -125,8 +124,6 @@ def SELU_der(x):
 
 def Sigmoid(x):
 
-    # print(x)
-
     return 1/(1+m.exp(-x))
 
 def Sigmoid_der(x):
@@ -143,22 +140,8 @@ def Tanh_der(x):
 
 def Softplus(x):
 
-    # try:
-
-        return m.log(1+m.exp(x))
-
-    # except OverflowError:
-
-    #     print(x)
+    return m.log(1+m.exp(x))
 
 def Softplus_der(x):
 
     return Sigmoid(x)
-
-# def softmax(x):
-
-#     return x
-
-# def softmax_der(x):
-
-#     return x

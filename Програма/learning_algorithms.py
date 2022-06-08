@@ -5,10 +5,9 @@ Created on Wed Feb 23 09:54:48 2022
 @author: romas
 """
 
-import genetic_algorithm_functions as ga
-
 import backpropagation_functions as bf
 
+import genetic_algorithm_functions as ga
 
 def backpropagation(neur_arr, res, eta, err, batch, iteration, delta_w_arr, delta_w_bias_arr):
 
@@ -30,7 +29,7 @@ def genetic(neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w
 
     population_with_err = ga.create_initial_population(population_length, neur_arr, neur_layer_arr, set_length, set_data, set_res, w_bottom, w_upper, func_arr, func_der_arr)
 
-    normalized_fitness_population = ga.norm_fitness(population_with_err) # формулу всередині потрібно виправити
+    normalized_fitness_population = ga.norm_fitness(population_with_err)
 
 
     while len(new_population) < population_length:

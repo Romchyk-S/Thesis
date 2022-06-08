@@ -60,24 +60,13 @@ def add_weights(neur_arr, neur_layer_arr, *args):
 
         for j in neur_arr[i]:
 
-            try:
+            if len(args) == 2:
 
-                if len(args) == 2:
+                j.add_random_weights(neur_layer_arr[j.get_layer()], args[0], args[1])
 
-                    j.add_random_weights(neur_layer_arr[j.get_layer()], args[0], args[1])
+            else:
 
-                else:
-
-                    j.add_weights_from_arr(args[0][j.get_index()-1])
-
-
-            except IndexError:
-
-                print("IndErrS")
-
-                print()
-
-                break
+                j.add_weights_from_arr(args[0][j.get_index()-1])
 
         i += 1
 

@@ -80,8 +80,6 @@ def norm_fitness(population):
 
     fit_arr = list(population.values())
 
-    # print(fit_arr)
-
     chromosome_arr = list(population.keys())
 
     new_dict = {}
@@ -104,12 +102,6 @@ def norm_fitness(population):
         new_dict[chromosome_arr[i]] = m.exp(fit_arr[i])/exp_sum
 
         i += 1
-
-    # print(new_dict.values())
-
-    # print(sum(new_dict.values()))
-
-    # print()
 
     return new_dict
 
