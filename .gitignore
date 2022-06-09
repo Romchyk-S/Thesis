@@ -153,3 +153,5 @@ cython_debug/
 *.pdf
 Звіт.docx
 ~$Диплом.docx
+*.tmp
+~$ЦЕНЗІЯ_Щербак.doc
