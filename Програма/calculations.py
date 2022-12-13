@@ -290,15 +290,19 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
     plt.figure(1+learning_algorithm*3)
 
-    plt.title(f"Навчальна вибірка, похибка {tr_err}")
+    plt.title(f"Навчальна вибірка, похибка {round(tr_err, 3)}")
+    
+    plt.xlabel("ΔK", fontsize = "x-large")
+    
+    plt.ylabel("da/dN", fontsize = "x-large")
 
     i = 0
 
     while i < len(tr_res):
 
-        plt.scatter(tr_set_data[i][in_parm_for_graph], tr_set_res[i], c = "red")
+        plt.scatter(tr_set_data[i][in_parm_for_graph], tr_set_res[i], c = "red", marker="D")
 
-        plt.scatter(tr_set_data[i][in_parm_for_graph], tr_res[i], c = "blue")
+        plt.scatter(tr_set_data[i][in_parm_for_graph], tr_res[i], c = "blue", marker="^")
 
         i += 1
 
@@ -330,6 +334,9 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
         i += 1
 
+    plt.xlabel("x", fontsize = "x-large")
+    
+    plt.ylabel("y", fontsize = "x-large")
 
     plt.plot(x, tr_err_arr)
 
@@ -362,15 +369,19 @@ def main_calculation(error_threshold, epochs_threshold, tr_set_data, tr_set_res,
 
     plt.figure(3+learning_algorithm*3)
 
-    plt.title(f"Тестова вибірка, похибка {test_err}")
+    plt.title(f"Тестова вибірка, похибка {round(test_err, 3)}")
+    
+    plt.xlabel("ΔK", fontsize = "x-large")
+    
+    plt.ylabel("da/dN", fontsize = "x-large")
 
     i = 0
 
     while i < len(test_res):
 
-        plt.scatter(test_set_data[i][in_parm_for_graph], test_set_res[i], c = "red")
+        plt.scatter(test_set_data[i][in_parm_for_graph], test_set_res[i], c = "red", marker="D")
 
-        plt.scatter(test_set_data[i][in_parm_for_graph], test_res[i], c = "blue")
+        plt.scatter(test_set_data[i][in_parm_for_graph], test_res[i], c = "blue", marker="^")
 
         i += 1
 
